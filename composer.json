@@ -20,7 +20,8 @@
         "itsgoingd/slim-facades": "dev-master",
         "illuminate/database" : "4.*",
         "cartalyst/sentry" : "2.*",
-        "ircmaxell/password-compat": "1.0.*"
+        "ircmaxell/password-compat": "1.0.*",
+        "abraham/twitteroauth": "dev-master"
     },
     "autoload": {
         "psr-4": {

@@ -125,6 +125,25 @@ class Migrator{
                 $table->index('user_id');
             });
         }
+
+        /**
+         * create twitter_account table
+         */
+        if (!Capsule::schema()->hasTable('twitter_account')){
+            Capsule::schema()->create('twitter_account', function($table)
+            {
+                $table->increments('id');
+                $table->string('username');
+                $table->string('name');
+                $table->string('oauth_token');
+                $table->string('oauth_token_secret');
+                $table->integer('created_at');
+
+                // We'll need to ensure that MySQL uses the InnoDB engine to
+                // support the indexes, other engines aren't affected.
+                $table->engine = 'InnoDB';
+            });
+        }
     }
 
     /**
