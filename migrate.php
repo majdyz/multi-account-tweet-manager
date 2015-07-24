@@ -137,7 +137,7 @@ class Migrator{
                 $table->string('name');
                 $table->string('oauth_token');
                 $table->string('oauth_token_secret');
-                $table->integer('created_at');
+                $table->integer('joined_at');
 
                 // We'll need to ensure that MySQL uses the InnoDB engine to
                 // support the indexes, other engines aren't affected.

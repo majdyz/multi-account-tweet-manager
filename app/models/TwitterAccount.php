@@ -1,7 +1,5 @@
 <?php
 
-namespace app\models;
-
 use Illuminate\Database\Eloquent\Model;
 use Abraham\TwitterOAuth\TwitterOAuth;
 
@@ -11,41 +9,51 @@ use Abraham\TwitterOAuth\TwitterOAuth;
  * string $name
  * string $oauth_token
  * string $oauth_token_secret
- * integer $created_at
+ * integer $joined_at
  */
 
 class TwitterAccount extends Model
 {
-    protected $consumer_key = 'T8LKmlFvoJNyQFfk3IBIoPDdE';
-    protected $consumer_secret = 'Uwo3arcO5a4iRNj4mG15FVEIRZTa4XNOXhmsbFFmWCn8eEXnoW';
-    protected $access_token = '87912819-Lc8Bhg0xq2yD0oB1cZrkdsAYduXtLQN0QrHzFEjtL';
-    protected $access_token_secret = 'SbSqkV5OjoguU3WmnhLhzQfAEBHL7VPM4HtjyaREp9avH';
     protected $table = 'twitter_account';
-
-    public static function connection()
-    {
-        return new TwitterOAuth($this->consumer_key, $this->consumer_secret, $this->access_token, $this->access_token_secret);
-    }
+    public $timestamps = false;
 
     public static function getCredentials()
     {
-        return $this->connection()->get("account/verify_credentials");
+        global $config;
+        $oauth = new TwitterOAuth($config['twitter']['consumer_key'], $config['twitter']['consumer_secret'], $config['twitter']['access_token'], $config['twitter']['access_token_secret']);
+        return $oauth->get("account/verify_credentials");
     }
 
     public static function getToken()
     {
-        return $this->connection()->oauth("oauth/request_token");
+        global $config;
+        $oauth = new TwitterOAuth($config['twitter']['consumer_key'], $config['twitter']['consumer_secret'], $config['twitter']['access_token'], $config['twitter']['access_token_secret']);
+        return $oauth->oauth("oauth/request_token");
     }
 
-    public function setCreatedAt()
+    public static function autoSave()
     {
-        $this->created_at = time();
+        $account = new TwitterAccount();
+        $account->username = TwitterAccount::getCredentials()->screen_name;
+        $account->name = TwitterAccount::getCredentials()->name;
+        $account->oauth_token = TwitterAccount::getToken()['oauth_token'];
+        $account->oauth_token_secret = TwitterAccount::getToken()['oauth_token_secret'];
+        $account->joined_at = time();
+        $account->save();
+        return $account;
     }
 
-    public function getCreatedAt()
+    public function getJoinedAtPrettyAttribute()
     {
-        if ($this->created_at != null) {
-            return date('d M Y H:i', $this->created_at);
+        if ($this->joined_at != null) {
+            return date('d M Y H:i', $this->joined_at);
         }
+    }
+
+    public function toArray()
+    {
+        $array = parent::toArray();
+        $array['joinedAtPretty'] = $this->joinedAtPretty;
+        return $array;
     }
 }
