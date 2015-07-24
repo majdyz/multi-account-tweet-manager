@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+    <title>{{ title }}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% for metaname, metavalue in meta %}
+    <meta name="{{metaname}}" value="{{metavalue}}" />
+    {% endfor %}
+
+    <!-- publish javascript variable -->
+    <script>
+        var global = {{global|json_encode|raw}}
+    </script>
+
+    <!-- Include registered css -->
+    {% for cssfile in css.external %}
+    <link rel="stylesheet" href="{{cssfile}}" />
+    {% endfor %}
+
+    {% for cssfile in css.internal %}
+    <link rel="stylesheet" href="{{assetUrl}}css/{{cssfile}}" />
+    {% endfor %}
+</head>
+<body>
+    {% block body %}{% endblock %}
+
+    <!-- Include registered javascript -->
+    {% for jsfile in js.external %}
+    <script src="{{jsfile}}"></script>
+    {% endfor %}
+
+    {% for jsfile in js.internal %}
+    <script src="{{assetUrl}}js/{{jsfile}}"></script>
+    {% endfor %}
+</body>
+</html>

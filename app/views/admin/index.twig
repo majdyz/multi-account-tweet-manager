@@ -1,0 +1,16 @@
+{% extends 'master.twig' %}
+
+{% block body %}
+    <div id="wrapper">
+        {{include('admin/topbar.twig')}}
+        {{include('admin/sidebar.twig')}}
+        <div id="page-wrapper">
+            {% block content %}
+                {% include 'admin/dashboard.twig' %}
+            {% endblock %}
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+{% endblock %}
