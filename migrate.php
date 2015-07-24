@@ -144,6 +144,73 @@ class Migrator{
                 $table->engine = 'InnoDB';
             });
         }
+
+        /**
+         * create tweetset table
+         */
+        if (!Capsule::schema()->hasTable('tweetset')){
+            Capsule::schema()->create('tweetset', function($table)
+            {
+                $table->increments('id');
+                $table->string('name');
+
+                // We'll need to ensure that MySQL uses the InnoDB engine to
+                // support the indexes, other engines aren't affected.
+                $table->engine = 'InnoDB';
+            });
+        }
+
+        /**
+         * create tweet table
+         */
+        if (!Capsule::schema()->hasTable('tweet')){
+            Capsule::schema()->create('tweet', function($table)
+            {
+                $table->increments('id');
+                $table->string('name');
+                $table->integer('tweetset_id');
+                $table->string('text');
+                $table->string('mentions');
+                $table->string('hashtags');
+                
+                // We'll need to ensure that MySQL uses the InnoDB engine to
+                // support the indexes, other engines aren't affected.
+                $table->engine = 'InnoDB';
+                $table->index('tweetset_id');
+            });
+        }
+
+         /**
+         * create tweetmedia table
+         */
+        if (!Capsule::schema()->hasTable('tweetmedia')){
+            Capsule::schema()->create('tweetmedia', function($table)
+            {
+                $table->integer('tweet_id')->unsigned();
+                $table->integer('media_id')->unsigned();
+
+                // We'll need to ensure that MySQL uses the InnoDB engine to
+                // support the indexes, other engines aren't affected.
+                $table->engine = 'InnoDB';
+                $table->primary(array('tweet_id', 'media_id'));
+            });
+        }
+
+         /**
+         * create media table
+         */
+        if (!Capsule::schema()->hasTable('media')){
+            Capsule::schema()->create('media', function($table)
+            {
+                $table->increments('id');
+                $table->string('name');
+                $table->integer('size');
+
+                // We'll need to ensure that MySQL uses the InnoDB engine to
+                // support the indexes, other engines aren't affected.
+                $table->engine = 'InnoDB';
+            });
+        }
     }
 
     /**
