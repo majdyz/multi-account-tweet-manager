@@ -1,0 +1,48 @@
+{% extends 'master.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                {% if flash.message %}
+                <div class="alert alert-danger alert-dismissable" style="margin-top: 25px">
+                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                    {{ flash.message }}
+                </div>
+                {% endif %}
+                <div class="login-panel panel panel-default" style="margin-top:40px">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Please Sign In</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form role="form" method="post" action="{{baseUrl()}}/login">
+                            <input type="hidden" name="redirect" value="{{ flash.redirect ? : redirect}}">
+                            <fieldset>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus value="{{ flash.email }}">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Password" name="password" type="password" value="">
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="remember" type="checkbox" value="Remember Me" {% if flash.remember %}checked{% endif %}>Remember Me
+                                    </label>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-xs-6 text-center">
+                                        <button type="submit" class="btn btn-md btn-success btn-block">Login</button>
+                                    </div>
+                                    <div class="col-xs-6 text-center">
+                                        <a href="{{siteUrl('/')}}" class="btn btn-md btn-danger btn-block">Cancel</a>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
