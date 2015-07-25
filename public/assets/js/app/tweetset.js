@@ -14,38 +14,39 @@ $(function(){
     /**
      * reset the form and show it!
      */
-    $('#btn-user-add').click(function(e){
+    $('#btn-tweetset-add').click(function(e){
         e.preventDefault();
-        $('#user-form-data').each(function(){
+        $('#tweetset-form-data').each(function(){
             this.reset();
         });
-        $('#btn-user-save').attr('data-method', 'POST');
-        $('#user-modal').modal('show');
+        $('#btn-tweetset-save').attr('data-method', 'POST');
+        $('#tweetset-modal').modal('show');
     });
 
     /**
      * sen GET request to display resource with specific id, and display it in modal form
      */
-    $('#user-table').on('click', '.btn-user-edit', function(e){
-        var $userid = $(this).attr('data-id');
+    $('#tweetset-table').on('click', '.btn-tweetset-edit', function(e){
+        var $tweetsetid = $(this).attr('data-id');
 
         e.preventDefault();
         $loader.show();
 
-        $.get(global.baseUrl+'admin/user/'+$userid, function(resp){
+
+        $.get(global.baseUrl+'admin/tweetset/'+$tweetsetid, function(resp){
             if(resp.success){
-                $('#user-form-data').each(function(){
+                $('#tweetset-form-data').each(function(){
                     this.reset();
                 });
 
-                var $user = resp.data;
+                var $tweetset = resp.data;
 
-                for(var a in $user){
-                    $('#user_'+a).val($user[a]);
+                for(var a in $tweetset){
+                    $('#tweetset_'+a).val($tweetset[a]);
                 }
 
-                $('#btn-user-save').attr('data-method', 'PUT');
-                $('#user-modal').modal('show');
+                $('#btn-tweetset-save').attr('data-method', 'PUT');
+                $('#tweetset-modal').modal('show');
             }else{
                 alert(resp.message);
                 if(resp.code == 401){
@@ -60,21 +61,21 @@ $(function(){
     /**
      * send DELETE request to the resouce server
      */
-    $('#user-table').on('click', '.btn-user-delete', function(e){
-        var $userid = $(this).attr('data-id');
+    $('#tweetset-table').on('click', '.btn-tweetset-delete', function(e){
+        var $tweetsetid = $(this).attr('data-id');
         e.preventDefault();
 
-        if(confirm('Are you sure to delete this user?')){
+        if(confirm('Are you sure to delete this tweetset?')){
             $loader.show();
             $.ajax({
-                url    : global.baseUrl+'admin/user/'+$userid,
+                url    : global.baseUrl+'admin/tweetset/'+$tweetsetid,
                 method : 'DELETE',
                 data   : {
-                    id : $userid
+                    id : $tweetsetid
                 },
                 success : function(resp){
                     if(resp.success){
-                        $('#user-row-'+$userid).remove();
+                        $('#tweetset-row-'+$tweetsetid).remove();
                     }else{
                         alert(resp.message);
                         if(resp.code == 401){
@@ -92,13 +93,13 @@ $(function(){
      * or send PUT request to update data on resource server
      * based on data-method value
      */
-    $('#btn-user-save').click(function(e){
+    $('#btn-tweetset-save').click(function(e){
         e.preventDefault();
 
         var $button = $(this),
-            $userdata = $('#user-form-data').serialize(),
+            $tweetsetdata = $('#tweetset-form-data').serialize(),
             $method = $(this).attr('data-method'),
-            $url = ($method == 'POST') ? global.baseUrl+'admin/user' : global.baseUrl+'admin/user/'+$('#user_id').val();
+            $url = ($method == 'POST') ? global.baseUrl+'admin/tweetset' : global.baseUrl+'admin/tweetset/'+$('#tweetset_id').val();
 
         $button.prop('disabled', true);
         $button.html('saving...');
@@ -107,7 +108,7 @@ $(function(){
 
         $.ajax({
             url: $url,
-            data: $userdata,
+            data: $tweetsetdata,
             method : $method,
             success: function(resp){
 
@@ -117,35 +118,36 @@ $(function(){
 
                 if(resp.success){
 
-                    user = resp.data;
+                    tweetset = resp.data;
 
                     if($method == 'POST'){
-                        /** append user to new row */
-                        $('#user-table').append(
-                            '<tr id="user-row-'+resp.data.id+'">'+
-                                '<td>'+user.id+'</td>'+
-                                '<td>'+user.first_name+'</td>'+
-                                '<td>'+user.last_name+'</td>'+
-                                '<td>'+user.email+'</td>'+
+                        /** append tweetset to new row */
+                        $('#tweetset-table').append(
+                            '<tr id="tweetset-row-'+resp.data.id+'">'+
+                                '<td>'+tweetset.id+'</td>'+
+                                '<td>'+tweetset.name+'</td>'+
+                                '<td>'+tweetset.updated_at+'</td>'+
+                                '<td>'+tweetset.created_at+'</td>'+
                                 '<td class="text-center">'+
-                                    '<a data-id="'+user.id+'" class="btn btn-xs btn-primary btn-user-edit" href="#"><i class="fa fa-edit fa-fw"></i>Edit</a>'+
-                                    '<a data-id="'+user.id+'" class="btn btn-xs btn-danger btn-user-delete" href="#" style="margin-left: 5px"><i class="fa fa-times fa-fw"></i>Remove</a>'+
+                                    '<a data-id="'+tweetset.id+'" class="btn btn-xs btn-primary btn-tweetset-edit" href="#"><i class="fa fa-edit fa-fw"></i>Edit</a>'+
+                                    '<a data-id="'+tweetset.id+'" class="btn btn-xs btn-danger btn-tweetset-delete" href="#" style="margin-left: 5px"><i class="fa fa-times fa-fw"></i>Remove</a>'+
                                 '</td>'+
                             '</tr>'
                         );
                     }else{
-                        var $fields = $('#user-row-'+resp.data.id+' td');
-                        $($fields[1]).html(user.first_name);
-                        $($fields[2]).html(user.last_name);
-                        $($fields[3]).html(user.email);
+                        var $fields = $('#tweetset-row-'+resp.data.id+' td');
+                        $($fields[1]).html(tweetset.name);
+                        $($fields[2]).html(tweetset.updated_at);
+                        $($fields[3]).html(tweetset.created_at);
                     }
 
                     /** reset the form and hide modal form */
-                    $('#user-form-data').each(function(){
+                    $('#tweetset-form-data').each(function(){
                         this.reset();
                     });
-                    $('#user-modal').modal('hide');
+                    $('#tweetset-modal').modal('hide');
                 }else{
+                    console.log($url);
                     alert(resp.message);
                     if(resp.code == 401){
                         location.reload();

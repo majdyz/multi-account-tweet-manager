@@ -1,0 +1,36 @@
+<form role="form" class="form-horizontal" id="tweet-form-data">
+	<input type="hidden" id="tweet_id" name="id">
+
+    <div class="form-group">
+        <label for="name" class="col-lg-4 control-label">Name</label>
+        <div class="col-lg-8">
+            <input type="text" class="input-sm form-control validate[required]" name="name" id="tweet_name" placeholder="Name">
+        </div>
+        
+      <label for="tweetset_id" class="col-lg-4 control-label">TweetSet</label>
+      <div class="col-lg-8">
+        <select class="form-control" name="tweetset_id" id="tweet_tweetset_id">
+          {% for tweetset in tweetsets %}
+          	<option value = {{tweetset.id}}>{{tweetset.name}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+        <label for="text" class="col-lg-4 control-label">Text</label>
+        <div class="col-lg-8">
+            <input type="text" class="input-sm form-control validate[required]" name="text" id="tweet_text" placeholder="Text">
+        </div>
+
+        <label for="mentions" class="col-lg-4 control-label">Mentions</label>
+        <div class="col-lg-8">
+            <input type="text" class="input-sm form-control validate[required]" name="mentions" id="tweet_mentions" placeholder="Mentions">
+        </div>
+
+        <label for="hashtags" class="col-lg-4 control-label">Hashtags</label>
+        <div class="col-lg-8">
+            <input type="text" class="input-sm form-control validate[required]" name="hashtags" id="tweet_hashtags" placeholder="Hashtags">
+        </div>
+
+
+    </div>
+</form>
