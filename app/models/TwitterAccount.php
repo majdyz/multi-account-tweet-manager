@@ -9,6 +9,7 @@ use Abraham\TwitterOAuth\TwitterOAuth;
  * string $oauth_token
  * string $oauth_token_secret
  * integer $joined_at
+ * timestamp created_at
  */
 
 class TwitterAccount extends Model

@@ -152,10 +152,13 @@ class Migrator{
             {
                 $table->increments('id');
                 $table->string('name');
+                $table->timestamp('updated_at')->nullable();
+                $table->timestamp('created_at')->nullable();
 
                 // We'll need to ensure that MySQL uses the InnoDB engine to
                 // support the indexes, other engines aren't affected.
                 $table->engine = 'InnoDB';
+                $table->index('name');
             });
         }
 
@@ -171,6 +174,8 @@ class Migrator{
                 $table->string('text');
                 $table->string('mentions');
                 $table->string('hashtags');
+                $table->timestamp('updated_at')->nullable();
+                $table->timestamp('created_at')->nullable();
                 
                 // We'll need to ensure that MySQL uses the InnoDB engine to
                 // support the indexes, other engines aren't affected.
@@ -204,6 +209,8 @@ class Migrator{
                 $table->increments('id');
                 $table->string('name');
                 $table->integer('size');
+                $table->timestamp('updated_at')->nullable();
+                $table->timestamp('created_at')->nullable();
 
                 // We'll need to ensure that MySQL uses the InnoDB engine to
                 // support the indexes, other engines aren't affected.

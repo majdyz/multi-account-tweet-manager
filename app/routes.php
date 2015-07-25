@@ -38,6 +38,7 @@ Route::get('/login', 'Admin\AdminController:login')->name('login');
 Route::get('/logout', 'Admin\AdminController:logout')->name('logout');
 Route::post('/login', 'Admin\AdminController:doLogin');
 
+
 /** Route to documentation */
 Route::get('/doc(/:page+)', 'DocController:index');
 

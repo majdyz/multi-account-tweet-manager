@@ -1,5 +1,4 @@
 <?php
-namespace app\models;
 
 use Illuminate\Database\Eloquent\Model;
 use Abraham\TwitterOAuth\TwitterOAuth;
@@ -10,6 +9,8 @@ use Abraham\TwitterOAuth\TwitterOAuth;
  */
 class TweetMedia extends Model
 {
+	protected $table = 'tweetmedia';
+
 	public function tweet() {
         return $this->belongsTo('Tweet');
     }
