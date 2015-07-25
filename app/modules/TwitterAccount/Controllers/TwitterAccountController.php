@@ -5,6 +5,7 @@ namespace TwitterAccount\Controllers;
 use \App;
 use \View;
 use \Menu;
+use \Response;
 use \Admin\BaseController;
 
 use \TwitterAccount;
@@ -25,33 +26,24 @@ class TwitterAccountController extends BaseController
         View::display('@twitteraccount/twitter-account/index.twig', $this->data);
     }
 
-    public function show()
+    public function show($id)
     {
-
+        $this->data['title'] = TwitterAccount::find($id)->name;
+        $this->data['user'] = TwitterAccount::find($id);
+        View::display('@twitteraccount/twitter-account/view.twig', $this->data);
     }
 
-    public function store()
+    public function destroy($id)
     {
-
+        $this->findUser($id)->delete();
+        Response::redirect($this->siteUrl('admin/twitter-account'));
     }
 
-    public function create()
+    protected function findUser($id)
     {
-        
-    }
-
-    public function edit()
-    {
-
-    }
-
-    public function update()
-    {
-
-    }
-
-    public function destroy()
-    {
-
+        if (($model = TwitterAccount::find($id)) != null) {
+            return $model;
+        }
+        App::notFound();
     }
 }

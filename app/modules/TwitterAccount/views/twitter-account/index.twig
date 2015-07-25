@@ -1,11 +1,12 @@
 {% extends 'admin/index.twig' %}
 {% block content %}
+<ul class="breadcrumb">
+    <li><a href="../admin">Dashboard</a></li>
+    <li class="active">{{ title }}</li>
+</ul>
 <div class="row page-header-box">
     <div class="col-xs-10">
         <h3>{{ title }}</h3>
-    </div>
-    <div class="col-xs-2">
-
     </div>
 </div>
 <div class="row">
@@ -22,15 +23,15 @@
                     </tr>
                 </thead>
                 <tbody id="user-table">
-                    {% for user in users %}
+                    {% for i, user in users %}
                     <tr id="user-row-{{ user.id }}">
-                        <td>{{ user.id }}</td>
+                        <td>{{ i+1 }}</td>
                         <td>{{ user.username }}</td>
                         <td>{{ user.name }}</td>
                         <td>{{ user.joinedAtPretty }}</td>
                         <td class="text-center">
-                            <a data-id="{{ user.id }}" class="btn btn-xs btn-primary btn-user-edit" href="#"><i class="fa fa-edit fa-fw"></i>Edit</a>
-                            <a data-id="{{ user.id }}" class="btn btn-xs btn-danger btn-user-delete" href="#"><i class="fa fa-times fa-fw"></i>Remove</a>
+                            <a class="btn btn-xs btn-primary btn-user-view" href="twitter-account/show/{{ user.id }}"><i class="fa fa-eye fa-fw"></i>View</a>
+                            <a onclick="if (confirm('Are you sure want to delete this user?') == false) return false" class="btn btn-xs btn-danger btn-user-delete" href="twitter-account/destroy/{{ user.id }}"><i class="fa fa-times fa-fw"></i>Remove</a>
                         </td>
                     </tr>
                     {% endfor %}
