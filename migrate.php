@@ -209,12 +209,30 @@ class Migrator{
                 $table->increments('id');
                 $table->string('name');
                 $table->integer('size');
+                $table->integer('user_id');
                 $table->timestamp('updated_at')->nullable();
                 $table->timestamp('created_at')->nullable();
 
                 // We'll need to ensure that MySQL uses the InnoDB engine to
                 // support the indexes, other engines aren't affected.
                 $table->engine = 'InnoDB';
+                $table->index('user_id');
+            });
+        }
+
+         /**
+         * create user_twitter_account table
+         */
+        if (!Capsule::schema()->hasTable('user_twitter_account')){
+            Capsule::schema()->create('user_twitter_account', function($table)
+            {
+                $table->integer('user_id');
+                $table->integer('twitter_id');
+
+                // We'll need to ensure that MySQL uses the InnoDB engine to
+                // support the indexes, other engines aren't affected.
+                $table->engine = 'InnoDB';
+                $table->primary(array('user_id', 'twitter_id'));
             });
         }
     }
