@@ -28,8 +28,16 @@ class TweetController extends BaseController
         $this->data['tweets'] = Tweet::all()->toArray();
         $this->data['tweetsets'] = TweetSet::all()->toArray();
 
+
+        /*querying name of tweet*/
         foreach ($this->data['tweets'] as $i => $tweet) {
-            $this->data['tweets'][$i]['tweetset_name'] = TweetSet::find($tweet['tweetset_id'])->name;
+            $tweet = TweetSet::find($tweet['tweetset_id']);
+            if ($tweet) {
+                $this->data['tweets'][$i]['tweetset_name'] = $tweet->name;
+            }
+            else {
+                $this->data['tweets'][$i]['tweetset_name'] = "-N/A-";
+            }
         }
 
         /** load the tweet.js app */
