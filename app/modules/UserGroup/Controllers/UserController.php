@@ -110,6 +110,11 @@ class UserController extends BaseController
             /** in case request come from post http form */
             $input = is_null($input) ? Input::post() : $input;
 
+             // sanitize input
+            foreach ($input as $i => $value) {
+                $input[$i] = htmlspecialchars($value);
+            }
+
             if($input['password'] != $input['confirm_password']){
                 throw new Exception("Password and confirmation password not match", 1);
             }

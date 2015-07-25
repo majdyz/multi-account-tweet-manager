@@ -106,6 +106,11 @@ class TweetController extends BaseController
         
         try {
             $input = Input::put();
+
+            // sanitize input
+            foreach ($input as $i => $value) {
+                $input[$i] = htmlspecialchars($value);
+            }
             
             /** in case request come from post http form */
             $input = is_null($input) ? Input::post() : $input;
@@ -154,6 +159,11 @@ class TweetController extends BaseController
         
         try {
             $input = Input::post();
+
+            // sanitize input
+            foreach ($input as $i => $value) {
+                $input[$i] = htmlspecialchars($value);
+            }
             
             $tweet = new Tweet();
             $tweet->name = $input['name'];

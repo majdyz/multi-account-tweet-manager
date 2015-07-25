@@ -92,10 +92,15 @@ class TweetSetController extends BaseController
         
         try {
             $input = Input::put();
-            
+
             /** in case request come from post http form */
             $input = is_null($input) ? Input::post() : $input;
             
+            // sanitize input
+            foreach ($input as $i => $value) {
+                $input[$i] = htmlspecialchars($value);
+            }
+
             $tweetset = TweetSet::findOrFail($id);
             
             $tweetset->name = $input['name'];
@@ -135,6 +140,11 @@ class TweetSetController extends BaseController
         try {
             $input = Input::post();
             
+             // sanitize input
+            foreach ($input as $i => $value) {
+                $input[$i] = htmlspecialchars($value);
+            }
+
             $tweetset = new TweetSet();
             $tweetset->name = $input['name'];
 
