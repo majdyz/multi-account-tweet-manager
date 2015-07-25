@@ -79,8 +79,7 @@ class TweetController extends BaseController
         try {
             $tweet = Tweet::findOrFail($id);
             
-            //display edit form in non-ajax request
-            //
+            /** display edit form in non-ajax request */
             $this->data['title'] = 'Edit Tweet';
             $this->data['tweets'] = $tweet->toArray();
             
@@ -107,7 +106,7 @@ class TweetController extends BaseController
         try {
             $input = Input::put();
 
-            // sanitize input
+            /** sanitize input */
             foreach ($input as $i => $value) {
                 $input[$i] = htmlspecialchars($value);
             }
@@ -160,7 +159,7 @@ class TweetController extends BaseController
         try {
             $input = Input::post();
 
-            // sanitize input
+            /** sanitize input */
             foreach ($input as $i => $value) {
                 $input[$i] = htmlspecialchars($value);
             }

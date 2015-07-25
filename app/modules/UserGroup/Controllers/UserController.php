@@ -81,8 +81,8 @@ class UserController extends BaseController
     {
         try{
             $user = Sentry::findUserById($id);
-            //display edit form in non-ajax request
-            //
+
+            /** display edit form in non-ajax request */
             $this->data['title'] = 'Edit User';
             $this->data['user'] = $user->toArray();
 
@@ -110,7 +110,7 @@ class UserController extends BaseController
             /** in case request come from post http form */
             $input = is_null($input) ? Input::post() : $input;
 
-             // sanitize input
+             /** sanitize input */
             foreach ($input as $i => $value) {
                 $input[$i] = htmlspecialchars($value);
             }

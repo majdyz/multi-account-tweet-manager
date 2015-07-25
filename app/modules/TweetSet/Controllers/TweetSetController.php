@@ -65,8 +65,7 @@ class TweetSetController extends BaseController
         try {
             $tweetset = TweetSet::findOrFail($id);
             
-            //display edit form in non-ajax request
-            //
+            /** display edit form in non-ajax request */
             $this->data['title'] = 'Edit Tweetset';
             $this->data['tweetsets'] = $tweetset->toArray();
             
@@ -96,7 +95,7 @@ class TweetSetController extends BaseController
             /** in case request come from post http form */
             $input = is_null($input) ? Input::post() : $input;
             
-            // sanitize input
+            /** sanitize input */
             foreach ($input as $i => $value) {
                 $input[$i] = htmlspecialchars($value);
             }
@@ -140,7 +139,7 @@ class TweetSetController extends BaseController
         try {
             $input = Input::post();
             
-             // sanitize input
+            /** sanitize input */
             foreach ($input as $i => $value) {
                 $input[$i] = htmlspecialchars($value);
             }
