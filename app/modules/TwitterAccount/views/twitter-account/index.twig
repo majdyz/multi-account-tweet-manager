@@ -17,7 +17,6 @@
                     <tr>
                         <th>#</th>
                         <th>Username</th>
-                        <th>Name</th>
                         <th>Joined At</th>
                         <th style="width:15%" class="text-center">Action</th>
                     </tr>
@@ -27,7 +26,6 @@
                     <tr id="user-row-{{ user.id }}">
                         <td>{{ i+1 }}</td>
                         <td>{{ user.username }}</td>
-                        <td>{{ user.name }}</td>
                         <td>{{ user.joinedAtPretty }}</td>
                         <td class="text-center">
                             <a class="btn btn-xs btn-primary btn-user-view" href="twitter-account/show/{{ user.id }}"><i class="fa fa-eye fa-fw"></i>View</a>

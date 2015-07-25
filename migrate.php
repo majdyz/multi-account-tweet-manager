@@ -134,7 +134,6 @@ class Migrator{
             {
                 $table->increments('id');
                 $table->string('username');
-                $table->string('name');
                 $table->string('oauth_token');
                 $table->string('oauth_token_secret');
                 $table->integer('joined_at');
