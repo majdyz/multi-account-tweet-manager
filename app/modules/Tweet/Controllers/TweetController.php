@@ -23,19 +23,19 @@ class TweetController extends BaseController
     /**
      * display list of resource
      */
-    public function index($page = 1) {
-        $this->data['title'] = 'Tweet List';
-        $this->data['tweets'] = Tweet::all()->toArray();
-        $this->data['tweetsets'] = TweetSet::all()->toArray();
+    public function index($tweetset_id, $page = 1) {
+        $this->data['title'] = TweetSet::getOneTweetSet($tweetset_id)->name."'s Tweets";
+        $this->data['tweets'] = Tweet::getAllTweets($tweetset_id)->toArray();
+        $this->data['tweetsets'] = TweetSet::getAllTweetSets()->toArray();
 
 
         /*querying name of tweet*/
         foreach ($this->data['tweets'] as $i => $tweet) {
-            $tweet = TweetSet::find($tweet['tweetset_id']);
-            if ($tweet) {
+            try {
+                $tweet = TweetSet::getOneTweetSet($tweet['tweetset_id']);
                 $this->data['tweets'][$i]['tweetset_name'] = $tweet->name;
             }
-            else {
+            catch (Exception $ex) {
                 $this->data['tweets'][$i]['tweetset_name'] = "-N/A-";
             }
         }
@@ -45,6 +45,7 @@ class TweetController extends BaseController
         
         /** publish necessary js  variable */
         $this->publish('baseUrl', $this->data['baseUrl']);
+        $this->publish('tweetset_id', $tweetset_id);
         
         /** render the template */
         View::display('@tweet/tweet/index.twig', $this->data);
@@ -53,13 +54,13 @@ class TweetController extends BaseController
     /**
      * display resource with specific id
      */
-    public function show($id) {
+    public function show($tweetset_id,$id) {
         if (Request::isAjax()) {
             $tweet = null;
             $message = '';
             
             try {
-                $tweet = Tweet::findOrFail($id);
+                $tweet = Tweet::getOneTweet($tweetset_id,$id);
             }
             catch(Exception $e) {
                 $message = $e->getMessage();
@@ -75,9 +76,9 @@ class TweetController extends BaseController
     /**
      * show edit from resource with specific id
      */
-    public function edit($id) {
+    public function edit($tweetset_id,$id) {
         try {
-            $tweet = Tweet::findOrFail($id);
+            $tweet = Tweet::getOneTweet($tweetset_id,$id);
             
             /** display edit form in non-ajax request */
             $this->data['title'] = 'Edit Tweet';
@@ -97,7 +98,7 @@ class TweetController extends BaseController
     /**
      * update resource with specific id
      */
-    public function update($id) {
+    public function update($tweetset_id,$id) {
         $success = false;
         $message = '';
         $tweet = null;
@@ -114,20 +115,15 @@ class TweetController extends BaseController
             /** in case request come from post http form */
             $input = is_null($input) ? Input::post() : $input;
             
-            $tweet = Tweet::findOrFail($id);
-            
-            $tweet->name = $input['name'];
-            $tweet->tweetset_id = $input['tweetset_id'];
-            $tweet->text = $input['text'];
-            $tweet->mentions = $input['mentions'];
-            $tweet->hashtags = $input['hashtags'];
+            /** update tweet */
+            $tweet = Tweet::updateTweet($tweetset_id,$id,$input);
             
             $success = $tweet->save();
             $code = 200;
             $message = 'Tweet updated sucessully';
 
             $data = $tweet->toArray();
-            $data['tweetset_name'] = TweetSet::find($tweet->tweetset_id)->name;
+            $data['tweetset_name'] = TweetSet::getOneTweetSet($tweet->tweetset_id)->name;
         }
         catch(NotFoundException $e) {
             $message = $e->getMessage();
@@ -143,14 +139,14 @@ class TweetController extends BaseController
             Response::setBody(json_encode(array('success' => $success, 'data' => ($tweet) ? $data : $tweet, 'message' => $message, 'code' => $code)));
         } 
         else {
-            Response::redirect($this->siteUrl('admin/tweet/' . $id . '/edit'));
+            Response::redirect($this->siteUrl('admin/tweet/' . $tweetset_id . '/' . $id . '/edit'));
         }
     }
     
     /**
      * create new resource
      */
-    public function store() {
+    public function store($tweetset_id) {
         
         $tweet = null;
         $message = '';
@@ -158,25 +154,23 @@ class TweetController extends BaseController
         
         try {
             $input = Input::post();
+            $input['tweetset_id'] = $tweetset_id;
 
             /** sanitize input */
             foreach ($input as $i => $value) {
                 $input[$i] = htmlspecialchars($value);
             }
+
             
-            $tweet = new Tweet();
-            $tweet->name = $input['name'];
-            $tweet->tweetset_id = $input['tweetset_id'];
-            $tweet->text = $input['text'];
-            $tweet->mentions = $input['mentions'];
-            $tweet->hashtags = $input['hashtags'];
+            /* create a tweet */
+            $tweet = Tweet::createTweet($tweetset_id,$input);
             
             $success = $tweet->save();
             
             $message = 'Tweet created successfully';
 
             $data = $tweet->toArray();
-            $data['tweetset_name'] = TweetSet::find($tweet->tweetset_id)->name;
+            $data['tweetset_name'] = TweetSet::getOneTweetSet($tweet->tweetset_id)->name;
         }
         catch(Exception $e) {
             $message = $e->getMessage();
@@ -187,21 +181,21 @@ class TweetController extends BaseController
             Response::setBody(json_encode(array('success' => $success, 'data' => ($tweet) ? $data : $tweet, 'message' => $message, 'code' => $success ? 200 : 500)));
         } 
         else {
-            Response::redirect($this->siteUrl('admin/tweet'));
+            Response::redirect($this->siteUrl('admin/tweet/'.$tweetset_id));
         }
     }
     
     /**
      * destroy resource with specific id
      */
-    public function destroy($id) {
+    public function destroy($tweetset_id,$id) {
         $id = (int)$id;
         $deleted = false;
         $message = '';
         $code = 0;
         
         try {
-            $tweet = Tweet::findOrFail($id);
+            $tweet = Tweet::getOneTweet($tweetset_id,$id);
             $deleted = $tweet->delete();
             $code = 200;
         }
@@ -219,7 +213,7 @@ class TweetController extends BaseController
             Response::setBody(json_encode(array('success' => $deleted, 'data' => array('id' => $id), 'message' => $message, 'code' => $code)));
         } 
         else {
-            Response::redirect($this->siteUrl('admin/tweet'));
+            Response::redirect($this->siteUrl('admin/tweet/'.$tweetset_id));
         }
     }
 }

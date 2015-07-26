@@ -13,18 +13,27 @@ use \Admin\BaseController;
 
 class TweetSetController extends BaseController
 {
-    
     public function __construct() {
         parent::__construct();
         Menu::get('admin_sidebar')->setActiveMenu('tweetset');
     }
-    
+
+    /** 
+    * sanitize input 
+    */
+    private function sanitize ($input) {
+        foreach ($input as $i => $value) {
+           $input[$i] = htmlspecialchars($value);
+        }
+        return $input;
+    }
+
     /**
      * display list of resource
      */
     public function index($page = 1) {
         $this->data['title'] = 'Tweetset List';
-        $this->data['tweetsets'] = TweetSet::all()->toArray();
+        $this->data['tweetsets'] = TweetSet::getAllTweetSets()->toArray();
         
         /** load the tweetset.js app */
         $this->loadJs('app/tweetset.js');
@@ -45,7 +54,7 @@ class TweetSetController extends BaseController
             $message = '';
             
             try {
-                $tweetset = TweetSet::findOrFail($id);
+                $tweetset = TweetSet::getOneTweetSet($id);
             }
             catch(Exception $e) {
                 $message = $e->getMessage();
@@ -63,7 +72,7 @@ class TweetSetController extends BaseController
      */
     public function edit($id) {
         try {
-            $tweetset = TweetSet::findOrFail($id);
+            $tweetset = TweetSet::getOneTweetSet($id);
             
             /** display edit form in non-ajax request */
             $this->data['title'] = 'Edit Tweetset';
@@ -90,22 +99,16 @@ class TweetSetController extends BaseController
         $code = 0;
         
         try {
-            $input = Input::put();
+            $input = $this->sanitize(Input::put());
 
             /** in case request come from post http form */
-            $input = is_null($input) ? Input::post() : $input;
+            $input = is_null($input) ? $this->sanitize(Input::post()) : $input;
             
-            /** sanitize input */
-            foreach ($input as $i => $value) {
-                $input[$i] = htmlspecialchars($value);
-            }
-
-            $tweetset = TweetSet::findOrFail($id);
-            
-            $tweetset->name = $input['name'];
-
-            
+           
+            /* update tweetset */
+            $tweetset = TweetSet::updateTweetSet($id,$input);
             $success = $tweetset->save();
+
             $code = 200;
             $message = 'Tweetset updated sucessully';
         }
@@ -144,11 +147,10 @@ class TweetSetController extends BaseController
                 $input[$i] = htmlspecialchars($value);
             }
 
-            $tweetset = new TweetSet();
-            $tweetset->name = $input['name'];
-
-            
+            /* create new tweetset */
+            $tweetset = TweetSet::createTweetSet($input);
             $success = $tweetset->save();
+
             
             $message = 'Tweetset created successfully';
         }
@@ -175,7 +177,7 @@ class TweetSetController extends BaseController
         $code = 0;
         
         try {
-            $tweetset = TweetSet::findOrFail($id);
+            $tweetset = TweetSet::getOneTweetSet($id);
             $deleted = $tweetset->delete();
             $code = 200;
         }

@@ -148,30 +148,33 @@ class Migrator{
         /**
          * create tweetset table
          */
-        if (!Capsule::schema()->hasTable('tweetset')){
-            Capsule::schema()->create('tweetset', function($table)
+        if (!Capsule::schema()->hasTable('tweetsets')){
+            Capsule::schema()->create('tweetsets', function($table)
             {
                 $table->increments('id');
                 $table->string('name');
                 $table->timestamp('updated_at')->nullable();
                 $table->timestamp('created_at')->nullable();
+                $table->unsignedInteger('user_id')->nullable();;
+                $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
 
                 // We'll need to ensure that MySQL uses the InnoDB engine to
                 // support the indexes, other engines aren't affected.
                 $table->engine = 'InnoDB';
-                $table->index('name');
+                $table->index(array('name'));
             });
         }
 
         /**
          * create tweet table
          */
-        if (!Capsule::schema()->hasTable('tweet')){
-            Capsule::schema()->create('tweet', function($table)
+        if (!Capsule::schema()->hasTable('tweets')){
+            Capsule::schema()->create('tweets', function($table)
             {
                 $table->increments('id');
                 $table->string('name');
-                $table->integer('tweetset_id');
+                $table->unsignedInteger('tweetset_id')->nullable();;
+                $table->foreign('tweetset_id')->references('id')->on('tweetsets')->onDelete('cascade')->onUpdate('cascade');
                 $table->string('text');
                 $table->string('mentions');
                 $table->string('hashtags');
@@ -181,38 +184,39 @@ class Migrator{
                 // We'll need to ensure that MySQL uses the InnoDB engine to
                 // support the indexes, other engines aren't affected.
                 $table->engine = 'InnoDB';
-                $table->index('tweetset_id');
-            });
-        }
-
-         /**
-         * create tweetmedia table
-         */
-        if (!Capsule::schema()->hasTable('tweetmedia')){
-            Capsule::schema()->create('tweetmedia', function($table)
-            {
-                $table->integer('tweet_id')->unsigned();
-                $table->integer('media_id')->unsigned();
-
-                // We'll need to ensure that MySQL uses the InnoDB engine to
-                // support the indexes, other engines aren't affected.
-                $table->engine = 'InnoDB';
-                $table->primary(array('tweet_id', 'media_id'));
             });
         }
 
          /**
          * create media table
          */
-        if (!Capsule::schema()->hasTable('media')){
-            Capsule::schema()->create('media', function($table)
+        if (!Capsule::schema()->hasTable('medias')){
+            Capsule::schema()->create('medias', function($table)
             {
                 $table->increments('id');
                 $table->string('name');
                 $table->integer('size');
-                $table->integer('user_id');
                 $table->timestamp('updated_at')->nullable();
                 $table->timestamp('created_at')->nullable();
+
+                // We'll need to ensure that MySQL uses the InnoDB engine to
+                // support the indexes, other engines aren't affected.
+                $table->engine = 'InnoDB';
+            });
+        }
+        
+         /**
+         * create tweetmedia table
+         */
+        if (!Capsule::schema()->hasTable('tweetmedias')){
+            Capsule::schema()->create('tweetmedias', function($table)
+            {
+
+                $table->unsignedInteger('tweet_id')->nullable();
+                $table->foreign('tweet_id')->references('id')->on('tweets')->onDelete('cascade')->onUpdate('cascade');
+                
+                $table->unsignedInteger('media_id')->nullable();
+                $table->foreign('media_id')->references('id')->on('medias')->onDelete('cascade')->onUpdate('cascade');
 
                 // We'll need to ensure that MySQL uses the InnoDB engine to
                 // support the indexes, other engines aren't affected.

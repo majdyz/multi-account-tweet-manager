@@ -18,7 +18,10 @@ class Initialize extends \SlimStarter\Module\Initializer{
 
     public function registerAdminMenu(){
 
-        $adminMenu = Menu::get('admin_sidebar');
+        /* side bar for tweet temporarily removed*/
+
+        /*
+         $adminMenu = Menu::get('admin_sidebar');
 
         $tweetMenu = $adminMenu->createItem('tweet', array(
             'label' => 'Tweet',
@@ -27,9 +30,10 @@ class Initialize extends \SlimStarter\Module\Initializer{
         ));
 
         $adminMenu->addItem('tweet', $tweetMenu);
+        */
     }
 
     public function registerAdminRoute(){
-        Route::resource('/tweet', 'Tweet\Controllers\TweetController');
+        Route::resource('/tweet/:tweetset_id', 'Tweet\Controllers\TweetController');
     }
 }

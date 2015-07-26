@@ -22,9 +22,11 @@ class Initialize extends \SlimStarter\Module\Initializer{
 
         $tweetsetMenu = $adminMenu->createItem('tweetset', array(
             'label' => 'TweetSet',
-            'icon'  => 'folder',
+            'icon'  => 'comment',
             'url'   => 'admin/tweetset'
         ));
+
+        $tweetsetMenu->setAttribute('id','tweetset_navbar');
 
         $adminMenu->addItem('tweetset', $tweetsetMenu);
     }
