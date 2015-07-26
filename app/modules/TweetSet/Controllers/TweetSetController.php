@@ -6,6 +6,7 @@ use \View;
 use \Menu;
 use \Input;
 use \TweetSet;
+use \User;
 use \Request;
 use \Response;
 use \Exception;
@@ -45,6 +46,14 @@ class TweetSetController extends BaseController
         View::display('@tweetset/tweetset/index.twig', $this->data);
     }
     
+    /**
+    * distribute random tweet for each user's twitter account
+    */
+    public function random($id) {
+        $this->d
+    }
+
+
     /**
      * display resource with specific id
      */
