@@ -93,10 +93,7 @@ class TwitterAccountController extends BaseController
             $account->joined_at = time();
             $account->status = 2;
             $account->save();
-            $user = new UserTwitterAccount;
-            $user->user_id = Sentry::getUser()->id;
-            $user->twitter_id = $account->id;
-            $user->save();
+            $account->users()->save(\User::find(Sentry::getUser()->id));
         }
         Response::redirect($this->siteUrl('admin/twitter-account/connect/success/' . $access_token['screen_name']));
     }

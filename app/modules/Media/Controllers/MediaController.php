@@ -10,6 +10,7 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 use \Media;
 use \TweetMedia;
 use \TwitterAccount;
+use \User;
 
 class MediaController extends BaseController
 {
@@ -22,6 +23,7 @@ class MediaController extends BaseController
 
     public function index()
     {
+        var_dump(User::find(\Sentry::getUser()->id)->twitterAccounts); die();
         $connection = new TwitterOAuth(
             TwitterAccount::getCredentialsTwitter()['consumer_key'],
             TwitterAccount::getCredentialsTwitter()['consumer_secret'],

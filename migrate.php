@@ -129,7 +129,7 @@ class Migrator{
         /**
          * create twitter_account table
          */
-        if (!Capsule::schema()->hasTable('twitter_account')){
+        if (!Capsule::schema()->hasTable('twitteraccounts')){
             Capsule::schema()->create('twitter_account', function($table)
             {
                 $table->increments('id');
@@ -227,7 +227,7 @@ class Migrator{
          /**
          * create user_twitter_account table
          */
-        if (!Capsule::schema()->hasTable('user_twitter_account')){
+        if (!Capsule::schema()->hasTable('twitteraccount_user')){
             Capsule::schema()->create('user_twitter_account', function($table)
             {
                 $table->unsignedInteger('user_id')->nullable();

@@ -14,7 +14,7 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 
 class TwitterAccount extends Model
 {
-    protected $table = 'twitter_account';
+    protected $table = 'twitteraccounts';
     public $timestamps = false;
 
     public static function getCredentialsTwitter()
