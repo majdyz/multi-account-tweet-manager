@@ -232,7 +232,10 @@ class Migrator{
             Capsule::schema()->create('user_twitter_account', function($table)
             {
                 $table->integer('user_id');
+                $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+
                 $table->integer('twitter_id');
+                $table->foreign('twitter_id')->references('id')->on('userTwitterAccounts')->onDelete('cascade')->onUpdate('cascade');
 
                 // We'll need to ensure that MySQL uses the InnoDB engine to
                 // support the indexes, other engines aren't affected.
