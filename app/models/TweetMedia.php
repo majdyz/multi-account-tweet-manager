@@ -10,6 +10,7 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 class TweetMedia extends Model
 {
 	protected $table = 'tweetmedias';
+  public $timestamps = false;
 
 	public function tweet() {
         return $this->belongsTo('Tweet');
