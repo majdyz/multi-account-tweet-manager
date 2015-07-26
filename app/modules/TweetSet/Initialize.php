@@ -26,6 +26,8 @@ class Initialize extends \SlimStarter\Module\Initializer{
             'url'   => 'admin/tweetset'
         ));
 
+        $tweetsetMenu->setAttribute('id','tweetset_navbar');
+
         $adminMenu->addItem('tweetset', $tweetsetMenu);
     }
 

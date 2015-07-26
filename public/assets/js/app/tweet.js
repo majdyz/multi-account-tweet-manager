@@ -1,3 +1,5 @@
+document.getElementById("tweetset_navbar").className = "active menu_active";
+
 $(function(){
     /**
      * all response will be in below format
@@ -9,6 +11,7 @@ $(function(){
      * }
      */
 
+    
     var $loader = $('#loader');
 
     /**
