@@ -9,7 +9,7 @@ use Abraham\TwitterOAuth\TwitterOAuth;
  * string $oauth_token
  * string $oauth_token_secret
  * integer $joined_at
- * timestamp created_at
+ * integer $status
  */
 
 class TwitterAccount extends Model
@@ -24,6 +24,24 @@ class TwitterAccount extends Model
             'consumer_key' => $config['twitter']['consumer_key'],
             'consumer_secret' => $config['twitter']['consumer_secret']
         ];  
+    }
+
+    public function disableAccount()
+    {
+        $this->status = 1;
+        return $this->save();
+    }
+
+    public function enableAccount()
+    {
+        $this->status = 2;
+        return $this->save();
+    }
+
+    public function deleteAccount()
+    {
+        $this->status = 0;
+        return $this->save();
     }
 
     public function getJoinedAtPrettyAttribute()
