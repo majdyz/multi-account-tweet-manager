@@ -7,8 +7,10 @@ use \View;
 use \Menu;
 use \Response;
 use \Admin\BaseController;
+use \Sentry;
 use Abraham\TwitterOAuth\TwitterOAuth;
 use \TwitterAccount;
+use \UserTwitterAccount;
 
 class TwitterAccountController extends BaseController
 {
@@ -91,6 +93,10 @@ class TwitterAccountController extends BaseController
             $account->joined_at = time();
             $account->status = 2;
             $account->save();
+            $user = new UserTwitterAccount;
+            $user->user_id = Sentry::getUser()->id;
+            $user->twitter_id = $account->id;
+            $user->save();
         }
         Response::redirect($this->siteUrl('admin/twitter-account/connect/success/' . $access_token['screen_name']));
     }
