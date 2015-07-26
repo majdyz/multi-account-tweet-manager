@@ -29,7 +29,7 @@ class TwitterAccount extends Model
     }
 
     public function users() {
-        return $this->belongsToMany('User', 'user_twitter_account', 'twitter_id', 'user_id');
+        return $this->belongsToMany('User', 'twitteraccount_user', 'twitter_id', 'user_id');
     }
 
     public function disableAccount()
