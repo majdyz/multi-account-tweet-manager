@@ -221,7 +221,6 @@ class Migrator{
                 // We'll need to ensure that MySQL uses the InnoDB engine to
                 // support the indexes, other engines aren't affected.
                 $table->engine = 'InnoDB';
-                $table->index('user_id');
             });
         }
 
@@ -231,16 +230,16 @@ class Migrator{
         if (!Capsule::schema()->hasTable('user_twitter_account')){
             Capsule::schema()->create('user_twitter_account', function($table)
             {
-                $table->integer('user_id');
+                $table->unsignedInteger('user_id')->nullable();
                 $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
 
-                $table->integer('twitter_id');
-                $table->foreign('twitter_id')->references('id')->on('userTwitterAccounts')->onDelete('cascade')->onUpdate('cascade');
+                $table->unsignedInteger('twitter_id')->nullable();
+                $table->foreign('twitter_id')->references('id')->on('twitter_account')->onDelete('cascade')->onUpdate('cascade');
 
                 // We'll need to ensure that MySQL uses the InnoDB engine to
                 // support the indexes, other engines aren't affected.
                 $table->engine = 'InnoDB';
-                $table->primary(array('user_id', 'twitter_id'));
+                // $table->primary(array('user_id', 'twitter_id'));
             });
         }
     }
