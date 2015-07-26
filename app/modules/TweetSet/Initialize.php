@@ -33,6 +33,7 @@ class Initialize extends \SlimStarter\Module\Initializer{
 
     public function registerAdminRoute(){
         Route::resource('/tweetset', 'TweetSet\Controllers\TweetSetController');
-        // Route::resource('/tweetset/random-tweet/:tweetset_id', 'TweetSet\Controllers\TweetSetController:randomTweet');
+        Route::get('/tweetset/random-tweet/:tweetset_id', 'TweetSet\Controllers\TweetSetController:randomTweet');
+        Route::get('/tweetset/show-tweet/:tweetset_id', 'TweetSet\Controllers\TweetSetController:showTweet');
     }
 }

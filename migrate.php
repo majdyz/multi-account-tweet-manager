@@ -208,8 +208,8 @@ class Migrator{
          /**
          * create tweetmedia table
          */
-        if (!Capsule::schema()->hasTable('tweetmedias')){
-            Capsule::schema()->create('tweetmedias', function($table)
+        if (!Capsule::schema()->hasTable('tweet_media')){
+            Capsule::schema()->create('tweet_media', function($table)
             {
 
                 $table->unsignedInteger('tweet_id')->nullable();
