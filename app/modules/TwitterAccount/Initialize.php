@@ -33,6 +33,9 @@ class Initialize extends \SlimStarter\Module\Initializer{
         Route::resource('/twitter-account', 'TwitterAccount\Controllers\TwitterAccountController');
         Route::get('/twitter-account/show/:id', 'TwitterAccount\Controllers\TwitterAccountController:show');
         Route::get('/twitter-account/destroy/:id', 'TwitterAccount\Controllers\TwitterAccountController:destroy');
+        Route::get('/twitter-account/disable/:id', 'TwitterAccount\Controllers\TwitterAccountController:disable');
+        Route::get('/twitter-account/enable/:id', 'TwitterAccount\Controllers\TwitterAccountController:enable');
+        Route::get('/twitter-account/delete/:id', 'TwitterAccount\Controllers\TwitterAccountController:delete');
 
         Route::get('/twitter-account/connect/add', 'TwitterAccount\Controllers\TwitterAccountController:add');
         Route::get('/twitter-account/connect/start', 'TwitterAccount\Controllers\TwitterAccountController:connect');

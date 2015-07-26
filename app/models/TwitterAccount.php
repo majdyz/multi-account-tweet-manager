@@ -51,6 +51,22 @@ class TwitterAccount extends Model
         }
     }
 
+    public function getStatusConstAttribute()
+    {
+        return [
+            0 => 'Deleted',
+            1 => 'Inactive',
+            2 => 'Active'
+        ];
+    }
+
+    public function getStatusPrettyAttribute()
+    {
+        if ($this->status != null) {
+            return $this->getStatusConstAttribute()[$this->status];
+        }
+    }
+
     public function toArray()
     {
         $array = parent::toArray();
