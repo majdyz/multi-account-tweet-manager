@@ -22,12 +22,14 @@ class TwitterAccount extends Model
         global $config;
         return [
             'consumer_key' => $config['twitter']['consumer_key'],
-            'consumer_secret' => $config['twitter']['consumer_secret']
+            'consumer_secret' => $config['twitter']['consumer_secret'],
+            'oauth_token' => $config['twitter_seeds']['oauth_token'],
+            'oauth_token_secret' => $config['twitter_seeds']['oauth_token_secret']
         ];  
     }
 
     public function users() {
-        return $this->belongsToMany('User', 'UserTwitterAccount', 'twitter_id', 'user_id');
+        return $this->belongsToMany('User', 'user_twitter_account', 'twitter_id', 'user_id');
     }
 
     public function disableAccount()

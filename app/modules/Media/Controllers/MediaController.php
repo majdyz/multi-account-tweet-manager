@@ -22,7 +22,11 @@ class MediaController extends BaseController
 
     public function index()
     {
-        $connection = new TwitterOAuth(TwitterAccount::getCredentialsTwitter()['consumer_key'], TwitterAccount::getCredentialsTwitter()['consumer_secret'], '3292383559-hlWR7BSiczsXCDpuInyeZAmeNOvVZvI8YDZtrPv', 'QnAnW1VPBhU2XNJbrb2I17jhUHHZFJO7qfSBjyJKbfEL4');
+        $connection = new TwitterOAuth(
+            TwitterAccount::getCredentialsTwitter()['consumer_key'],
+            TwitterAccount::getCredentialsTwitter()['consumer_secret'],
+            TwitterAccount::getCredentialsTwitter()['oauth_token'],
+            TwitterAccount::getCredentialsTwitter()['oauth_token_secret']);
         $media1 = $connection->upload('media/upload', array('media' => 'http://cdn-2.tstatic.net/jabar/foto/bank/images/kucing-berdoa.jpg'));
         $parameters = array(
             'status' => 'Meow Meow Meow',

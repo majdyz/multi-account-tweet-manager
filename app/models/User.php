@@ -8,6 +8,6 @@ class User extends Model {
     public $timestamps = false;
 
     public function twitterAccounts() {
-        return $this->belongsToMany('TwitterAccount', 'UserTwitterAccount', 'user_id', 'twitter_id');
+        return $this->belongsToMany('TwitterAccount', 'user_twitter_account', 'user_id', 'twitter_id');
     }
 }
