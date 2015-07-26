@@ -130,7 +130,7 @@ class Migrator{
          * create twitter_account table
          */
         if (!Capsule::schema()->hasTable('twitteraccounts')){
-            Capsule::schema()->create('twitter_account', function($table)
+            Capsule::schema()->create('twitteraccounts', function($table)
             {
                 $table->increments('id');
                 $table->string('username');
@@ -228,13 +228,13 @@ class Migrator{
          * create user_twitter_account table
          */
         if (!Capsule::schema()->hasTable('twitteraccount_user')){
-            Capsule::schema()->create('user_twitter_account', function($table)
+            Capsule::schema()->create('twitteraccount_user', function($table)
             {
                 $table->unsignedInteger('user_id')->nullable();
                 $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
 
                 $table->unsignedInteger('twitter_id')->nullable();
-                $table->foreign('twitter_id')->references('id')->on('twitter_account')->onDelete('cascade')->onUpdate('cascade');
+                $table->foreign('twitter_id')->references('id')->on('twitteraccounts')->onDelete('cascade')->onUpdate('cascade');
 
                 // We'll need to ensure that MySQL uses the InnoDB engine to
                 // support the indexes, other engines aren't affected.
