@@ -19,12 +19,14 @@ $(function(){
         $('#tweet-form-data').each(function(){
             this.reset();
         });
+        $('#tweet_tweetset_id').hide();
+        $('#tweet_tweetset_id_title').hide();
         $('#btn-tweet-save').attr('data-method', 'POST');
         $('#tweet-modal').modal('show');
     });
 
     /**
-     * sen GET request to display resource with specific id, and display it in modal form
+     * send GET request to display resource with specific id, and display it in modal form
      */
     $('#tweet-table').on('click', '.btn-tweet-edit', function(e){
         var $tweetid = $(this).attr('data-id');
@@ -33,13 +35,16 @@ $(function(){
         $loader.show();
 
 
-        $.get(global.baseUrl+'admin/tweet/'+$tweetid, function(resp){
+        $.get(global.baseUrl+'admin/tweet/'+global.tweetset_id+'/'+$tweetid, function(resp){
             if(resp.success){
                 $('#tweet-form-data').each(function(){
                     this.reset();
                 });
 
                 var $tweet = resp.data;
+
+                $('#tweet_tweetset_id').show();
+                $('#tweet_tweetset_id_title').show();
 
                 for(var a in $tweet){
                     $('#tweet_'+a).val($tweet[a]);
@@ -68,7 +73,7 @@ $(function(){
         if(confirm('Are you sure to delete this tweet?')){
             $loader.show();
             $.ajax({
-                url    : global.baseUrl+'admin/tweet/'+$tweetid,
+                url    : global.baseUrl+'admin/tweet/'+global.tweetset_id+'/'+$tweetid,
                 method : 'DELETE',
                 data   : {
                     id : $tweetid
@@ -99,7 +104,7 @@ $(function(){
         var $button = $(this),
             $tweetdata = $('#tweet-form-data').serialize(),
             $method = $(this).attr('data-method'),
-            $url = ($method == 'POST') ? global.baseUrl+'admin/tweet' : global.baseUrl+'admin/tweet/'+$('#tweet_id').val();
+            $url = ($method == 'POST') ? global.baseUrl+'admin/tweet/'+global.tweetset_id : global.baseUrl+'admin/tweet/'+global.tweetset_id+'/'+$('#tweet_id').val();
 
         $button.prop('disabled', true);
         $button.html('saving...');
@@ -126,7 +131,6 @@ $(function(){
                             '<tr id="tweet-row-'+resp.data.id+'">'+
                                 '<td>'+tweet.id+'</td>'+
                                 '<td>'+tweet.name+'</td>'+
-                                '<td>'+tweet.tweetset_name+'</td>'+
                                 '<td>'+tweet.text+'</td>'+
                                 '<td>'+tweet.mentions+'</td>'+
                                 '<td>'+tweet.hashtags+'</td>'+
@@ -140,6 +144,9 @@ $(function(){
                         );
                     }else{
                         var $fields = $('#tweet-row-'+resp.data.id+' td');
+                        if (tweet.tweetset_id != global.tweetset_id) {
+                            $fields.hide();
+                        }
                         $($fields[1]).html(tweet.name);
                         $($fields[2]).html(tweet.tweetset_name);
                         $($fields[3]).html(tweet.text);
@@ -155,7 +162,6 @@ $(function(){
                     });
                     $('#tweet-modal').modal('hide');
                 }else{
-                    console.log($url);
                     alert(resp.message);
                     if(resp.code == 401){
                         location.reload();

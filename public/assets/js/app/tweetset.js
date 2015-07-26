@@ -19,6 +19,7 @@ $(function(){
         $('#tweetset-form-data').each(function(){
             this.reset();
         });
+
         $('#btn-tweetset-save').attr('data-method', 'POST');
         $('#tweetset-modal').modal('show');
     });
@@ -57,6 +58,7 @@ $(function(){
             $loader.hide();
         });
     });
+
 
     /**
      * send DELETE request to the resouce server
@@ -129,6 +131,7 @@ $(function(){
                                 '<td>'+tweetset.updated_at+'</td>'+
                                 '<td>'+tweetset.created_at+'</td>'+
                                 '<td class="text-center">'+
+                                    '<a data-id="'+tweetset.id+'" class="btn btn-xs btn-success btn-tweetset-view" href="../admin/tweet/'+tweetset.id+'"><i class="fa fa-comment fa-fw"></i>Tweets</a>'+
                                     '<a data-id="'+tweetset.id+'" class="btn btn-xs btn-primary btn-tweetset-edit" href="#"><i class="fa fa-edit fa-fw"></i>Edit</a>'+
                                     '<a data-id="'+tweetset.id+'" class="btn btn-xs btn-danger btn-tweetset-delete" href="#" style="margin-left: 5px"><i class="fa fa-times fa-fw"></i>Remove</a>'+
                                 '</td>'+

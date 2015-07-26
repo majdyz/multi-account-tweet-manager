@@ -12,7 +12,7 @@ use Abraham\TwitterOAuth\TwitterOAuth;
  */
 class Media extends Model
 {
-	protected $table = 'media';
+	protected $table = 'medias';
 
 	public function tweets() {
         return $this->belongsToMany('Tweet', 'TweetMedia', 'media_id', 'tweet_id');

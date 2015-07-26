@@ -9,7 +9,7 @@ use Abraham\TwitterOAuth\TwitterOAuth;
  */
 class TweetMedia extends Model
 {
-	protected $table = 'tweetmedia';
+	protected $table = 'tweetmedias';
 
 	public function tweet() {
         return $this->belongsTo('Tweet');
