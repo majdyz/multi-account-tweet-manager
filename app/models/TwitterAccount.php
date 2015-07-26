@@ -9,7 +9,7 @@ use Abraham\TwitterOAuth\TwitterOAuth;
  * string $oauth_token
  * string $oauth_token_secret
  * integer $joined_at
- * timestamp created_at
+ * integer $status
  */
 
 class TwitterAccount extends Model
@@ -26,10 +26,44 @@ class TwitterAccount extends Model
         ];  
     }
 
+    public function disableAccount()
+    {
+        $this->status = 1;
+        return $this->save();
+    }
+
+    public function enableAccount()
+    {
+        $this->status = 2;
+        return $this->save();
+    }
+
+    public function deleteAccount()
+    {
+        $this->status = 0;
+        return $this->save();
+    }
+
     public function getJoinedAtPrettyAttribute()
     {
         if ($this->joined_at != null) {
             return date('d M Y H:i', $this->joined_at);
+        }
+    }
+
+    public function getStatusConstAttribute()
+    {
+        return [
+            0 => 'Deleted',
+            1 => 'Inactive',
+            2 => 'Active'
+        ];
+    }
+
+    public function getStatusPrettyAttribute()
+    {
+        if ($this->status != null) {
+            return $this->getStatusConstAttribute()[$this->status];
         }
     }
 

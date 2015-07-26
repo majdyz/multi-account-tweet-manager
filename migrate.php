@@ -137,6 +137,7 @@ class Migrator{
                 $table->string('oauth_token');
                 $table->string('oauth_token_secret');
                 $table->integer('joined_at');
+                $table->integer('status');
 
                 // We'll need to ensure that MySQL uses the InnoDB engine to
                 // support the indexes, other engines aren't affected.
@@ -210,6 +211,7 @@ class Migrator{
         if (!Capsule::schema()->hasTable('tweetmedias')){
             Capsule::schema()->create('tweetmedias', function($table)
             {
+
                 $table->unsignedInteger('tweet_id')->nullable();
                 $table->foreign('tweet_id')->references('id')->on('tweets')->onDelete('cascade')->onUpdate('cascade');
                 
@@ -219,6 +221,23 @@ class Migrator{
                 // We'll need to ensure that MySQL uses the InnoDB engine to
                 // support the indexes, other engines aren't affected.
                 $table->engine = 'InnoDB';
+                $table->index('user_id');
+            });
+        }
+
+         /**
+         * create user_twitter_account table
+         */
+        if (!Capsule::schema()->hasTable('user_twitter_account')){
+            Capsule::schema()->create('user_twitter_account', function($table)
+            {
+                $table->integer('user_id');
+                $table->integer('twitter_id');
+
+                // We'll need to ensure that MySQL uses the InnoDB engine to
+                // support the indexes, other engines aren't affected.
+                $table->engine = 'InnoDB';
+                $table->primary(array('user_id', 'twitter_id'));
             });
         }
     }

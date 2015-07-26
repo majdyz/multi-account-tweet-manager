@@ -49,8 +49,3 @@ foreach (Module::getModules() as $module) {
 
 /** default routing */
 Route::get('/', 'HomeController:welcome');
-
-Route::get('/connect', 'ConnectController:index');
-Route::get('/connect/start', 'ConnectController:connect');
-Route::get('/connect/finish', 'ConnectController:finish');
-Route::get('/connect/success/:username', 'ConnectController:success');
