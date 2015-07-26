@@ -26,6 +26,10 @@ class TwitterAccount extends Model
         ];  
     }
 
+    public function users() {
+        return $this->belongsToMany('User', 'UserTwitterAccount', 'twitter_id', 'user_id');
+    }
+
     public function disableAccount()
     {
         $this->status = 1;
