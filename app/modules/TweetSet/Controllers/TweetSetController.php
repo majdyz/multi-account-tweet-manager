@@ -9,6 +9,7 @@ use \TweetSet;
 use \User;
 use \Request;
 use \Response;
+use \Tweet;
 use \Exception;
 use \Admin\BaseController;
 
@@ -50,9 +51,8 @@ class TweetSetController extends BaseController
     * distribute random tweet for each user's twitter account
     */
     public function random($id) {
-        $this->d
+        // $this->d
     }
-
 
     /**
      * display resource with specific id
@@ -74,6 +74,37 @@ class TweetSetController extends BaseController
         } 
         else {
         }
+    }
+
+    /**
+     * display resource with specific id
+     */
+    public function showTweet($tweetset_id) {
+        $this->data['title'] = TweetSet::getOneTweetSet($tweetset_id)->name."'s Tweets";
+        $this->data['tweets'] = Tweet::getAllTweets($tweetset_id)->toArray();
+        $this->data['tweetsets'] = TweetSet::getAllTweetSets()->toArray();
+
+
+        /*querying name of tweet*/
+        foreach ($this->data['tweets'] as $i => $tweet) {
+            try {
+                $tweet = TweetSet::getOneTweetSet($tweet['tweetset_id']);
+                $this->data['tweets'][$i]['tweetset_name'] = $tweet->name;
+            }
+            catch (Exception $ex) {
+                $this->data['tweets'][$i]['tweetset_name'] = "-N/A-";
+            }
+        }
+
+        /** load the tweet.js app */
+        $this->loadJs('app/tweet.js');
+        
+        /** publish necessary js  variable */
+        $this->publish('baseUrl', $this->data['baseUrl']);
+        $this->publish('tweetset_id', $tweetset_id);
+        
+        /** render the template */
+        View::display('@tweet/tweet/index.twig', $this->data);
     }
     
     /**
