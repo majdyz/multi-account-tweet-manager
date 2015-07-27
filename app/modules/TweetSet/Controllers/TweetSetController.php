@@ -6,12 +6,15 @@ use \View;
 use \Menu;
 use \Input;
 use \TweetSet;
+use \TwitterAccount;
 use \User;
 use \Request;
 use \Response;
 use \Tweet;
+use \Sentry;
 use \Exception;
 use \Admin\BaseController;
+use Abraham\TwitterOAuth\TwitterOAuth;
 
 class TweetSetController extends BaseController
 {
@@ -50,9 +53,120 @@ class TweetSetController extends BaseController
     /**
     * distribute random tweet for each user's twitter account
     */
-    public function random($id) {
-        // $this->d
+    public function randomTweet($tweetset_id) {
+
+        $tweets = Tweet::getAllTweets($tweetset_id);
+        
+
+        $user = User::find(Sentry::getUser()->id);
+        
+        $accounts = $user->twitterAccounts->toArray();
+        $tweets  = Tweet::getAllTweets($tweetset_id)->toArray();
+
+        $tweets_count = count($tweets);
+        $accounts_count = count($accounts);
+        $results = [];
+
+        if ($tweets_count === 0) {
+            $this->data['title'] = 'Random List (no tweet)';
+            $this->data['error'] = "Sorry, You don't have any tweet for this tweetset";
+        }
+        else if ($accounts_count === 0) {
+            $this->data['title'] = 'Random List (no account)';
+            $this->data['error'] = "Sorry, You don't have any twitter account";
+        }
+        else {
+            foreach ($accounts as $account) {
+                // uniform mersenne twister random
+                $result  = ['account' => $account, 'tweet' => $tweets[mt_rand(0,$tweets_count-1)]]; 
+                $results[] = $result;
+            }
+
+            $this->data['title'] = 'Random List';
+            $this->data['random_result'] = $results;
+
+        }
+
+        /** load the tweet.js app */
+        $this->loadJs('app/random.js');
+        
+        /** publish necessary js  variable */
+        $this->publish('random_result', $results);
+        $this->publish('baseUrl', $this->data['baseUrl']);
+
+        View::display('@tweetset/tweetset/random.twig', $this->data);
+
+        /** unpublish necessary js  variable */
+        $this->unpublish('baseUrl', $this->data['baseUrl']);
+        $this->unpublish('random_result');
     }
+
+    /**
+    *   post the tweet using user's twitter account
+    */
+    public function postTweet () {
+        $data    = null;
+        $message = "";
+        $success = true;
+        
+        try {
+            $input = Input::post()['value'];
+
+            foreach ($input as $data) {
+                $account = $data['account'];
+                $tweet   = $data['tweet'];
+                $message = $tweet['text'];
+
+                $credentials = TwitterAccount::getCredentialsTwitter();
+
+                $connection = new TwitterOAuth(
+                                $credentials['consumer_key'], 
+                                $credentials['consumer_secret'], 
+                                // $credentials['oauth_token'],
+                                // $credentials['oauth_token_secret']
+                                $account['oauth_token'],
+                                $account['oauth_token_secret']
+                            );
+
+                $tweet_text = $tweet['text'];
+
+                if (strlen($tweet['mentions']) > 0) {
+                    $tweet_text = $tweet_text . "\n" .   $tweet['mentions'];
+                }
+
+                if (strlen($tweet['hashtags']) > 0) {
+                    $tweet_text = $tweet_text . "\n" . $tweet['hashtags'];
+                }  
+
+                $success_now = $connection->post("statuses/update", array(
+                                "status" =>$tweet_text,
+                            ));
+
+                if (!$success_now) {
+                    $success = false;
+                }
+            }
+                
+            $message = 'Tweets posted successfully';
+        }
+        catch(Exception $e) {
+            $message = $e->getMessage();
+        }
+        
+        if (Request::isAjax()) {
+            Response::headers()->set('Content-Type', 'application/json');
+            Response::setBody(json_encode(array(
+                    'success' => $success, 
+                    'data' => "",//($data) ? $data->toArray() : $data, 
+                    'message' => $message, 
+                    'code' => $success ? 200 : 500
+            )));
+        } 
+        else {
+            Response::redirect($this->siteUrl('admin/tweetset/random-tweet'));
+        }
+    }
+
 
     /**
      * display resource with specific id
@@ -105,6 +219,9 @@ class TweetSetController extends BaseController
         
         /** render the template */
         View::display('@tweet/tweet/index.twig', $this->data);
+
+        /** unpublish necessary js  variable */
+        $this->unpublish('tweetset_id', $tweetset_id);
     }
     
     /**
@@ -180,17 +297,11 @@ class TweetSetController extends BaseController
         $success = false;
         
         try {
-            $input = Input::post();
-            
-            /** sanitize input */
-            foreach ($input as $i => $value) {
-                $input[$i] = htmlspecialchars($value);
-            }
+            $input = $this->sanitize(Input::post());
 
             /* create new tweetset */
             $tweetset = TweetSet::createTweetSet($input);
             $success = $tweetset->save();
-
             
             $message = 'Tweetset created successfully';
         }
