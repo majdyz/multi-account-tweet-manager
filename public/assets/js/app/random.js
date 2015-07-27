@@ -28,7 +28,7 @@ $(function(){
                 }else{
                     $button.removeClass('disabled');
                     $button.attr("data-toggle", "modal");
-                    $button.html('try again');
+                    $button.html('Try Again');
 
                     if(resp.code == 401){
                         location.reload();

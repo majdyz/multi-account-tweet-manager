@@ -55,13 +55,8 @@ class TweetSetController extends BaseController
     */
     public function randomTweet($tweetset_id) {
 
-        $tweets = Tweet::getAllTweets($tweetset_id);
-        
-
-        $user = User::find(Sentry::getUser()->id);
-        
-        $accounts = $user->twitterAccounts->toArray();
-        $tweets  = Tweet::getAllTweets($tweetset_id)->toArray();
+        $accounts = User::getActiveAccounts()->toArray();
+        $tweets   = Tweet::getAllTweets($tweetset_id)->toArray();
 
         $tweets_count = count($tweets);
         $accounts_count = count($accounts);
@@ -107,7 +102,8 @@ class TweetSetController extends BaseController
     public function postTweet () {
         $data    = null;
         $message = "";
-        $success = true;
+        $success = false;
+        $user    = User::find(Sentry::getUser()->id);
         
         try {
             $input = Input::post()['value'];
@@ -117,13 +113,16 @@ class TweetSetController extends BaseController
                 $tweet   = $data['tweet'];
                 $message = $tweet['text'];
 
+                /** check wether the user own the account */
+                if (!$user->hasThisAccount($account['id'])) {
+                    throw new Exception("This is not your Twitter account");
+                }
+
                 $credentials = TwitterAccount::getCredentialsTwitter();
 
                 $connection = new TwitterOAuth(
                                 $credentials['consumer_key'], 
                                 $credentials['consumer_secret'], 
-                                // $credentials['oauth_token'],
-                                // $credentials['oauth_token_secret']
                                 $account['oauth_token'],
                                 $account['oauth_token_secret']
                             );
@@ -143,10 +142,11 @@ class TweetSetController extends BaseController
                             ));
 
                 if (!$success_now) {
-                    $success = false;
+                    throw new Exception('posting fail');
                 }
             }
                 
+            $success = true;
             $message = 'Tweets posted successfully';
         }
         catch(Exception $e) {
