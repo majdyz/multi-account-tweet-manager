@@ -62,7 +62,8 @@ class TwitterAccount extends Model
         return [
             0 => 'Deleted',
             1 => 'Inactive',
-            2 => 'Active'
+            2 => 'Active',
+            3 => 'Pending',
         ];
     }
 

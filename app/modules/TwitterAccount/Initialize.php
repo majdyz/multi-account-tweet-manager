@@ -29,6 +29,14 @@ class Initialize extends \SlimStarter\Module\Initializer{
         $adminMenu->addItem('twitteraccount', $userMenu);
     }
 
+    public function registerPublicRoute()
+    {
+        Route::get('/connect/:id', 'TwitterAccount\Controllers\TwitterAccountController:add');
+        Route::get('/connect/start/:id', 'TwitterAccount\Controllers\TwitterAccountController:connect');
+        // Route::get('/connect/finish/:id', 'TwitterAccount\Controllers\TwitterAccountController:finish');
+        Route::get('/connect/success/:id', 'TwitterAccount\Controllers\TwitterAccountController:success');
+    }
+
     public function registerAdminRoute(){
         Route::resource('/twitter-account', 'TwitterAccount\Controllers\TwitterAccountController');
         Route::get('/twitter-account/show/:id', 'TwitterAccount\Controllers\TwitterAccountController:show');
@@ -36,10 +44,5 @@ class Initialize extends \SlimStarter\Module\Initializer{
         Route::get('/twitter-account/disable/:id', 'TwitterAccount\Controllers\TwitterAccountController:disable');
         Route::get('/twitter-account/enable/:id', 'TwitterAccount\Controllers\TwitterAccountController:enable');
         Route::get('/twitter-account/delete/:id', 'TwitterAccount\Controllers\TwitterAccountController:delete');
-
-        Route::get('/twitter-account/connect/add', 'TwitterAccount\Controllers\TwitterAccountController:add');
-        Route::get('/twitter-account/connect/start', 'TwitterAccount\Controllers\TwitterAccountController:connect');
-        Route::get('/twitter-account/connect/finish', 'TwitterAccount\Controllers\TwitterAccountController:finish');
-        Route::get('/twitter-account/connect/success/:username', 'TwitterAccount\Controllers\TwitterAccountController:success');
     }
 }
