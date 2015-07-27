@@ -149,12 +149,11 @@ $(function(){
                             $fields.hide();
                         }
                         $($fields[1]).html(tweet.name);
-                        $($fields[2]).html(tweet.tweetset_name);
-                        $($fields[3]).html(tweet.text);
-                        $($fields[4]).html(tweet.mentions);
-                        $($fields[5]).html(tweet.hashtags);
-                        $($fields[6]).html(tweet.updated_at);
-                        $($fields[7]).html(tweet.created_at);
+                        $($fields[2]).html(tweet.text);
+                        $($fields[3]).html(tweet.mentions);
+                        $($fields[4]).html(tweet.hashtags);
+                        $($fields[5]).html(tweet.updated_at);
+                        $($fields[6]).html(tweet.created_at);
                     }
 
                     /** reset the form and hide modal form */

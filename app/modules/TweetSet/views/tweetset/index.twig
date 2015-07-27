@@ -23,7 +23,7 @@
                         <th>Name</th>
                         <th>Updated At</th>
                         <th>Created At</th>
-                        <th style="width:15%" class="text-center">Action</th>
+                        <th style = "width:20%" class="text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody id="tweetset-table">
@@ -34,10 +34,10 @@
                         <td>{{ tweetset.updated_at }}</td>
                         <td>{{ tweetset.created_at }}</td>
                         <td class="text-center">
-                            <a data-id="{{ tweetset.id }}" class="btn btn-xs btn-warning btn-tweetset-random" href="tweetset/random-tweet/{{tweetset.id}}"><i class="fa fa-fire fa-fw"></i>Tweets</a>
-                            <a data-id="{{ tweetset.id }}" class="btn btn-xs btn-success btn-tweetset-view" href="tweetset/show-tweet/{{tweetset.id}}"><i class="fa fa-comment fa-fw"></i>Tweets</a>
-                            <a data-id="{{ tweetset.id }}" class="btn btn-xs btn-primary btn-tweetset-edit" href="#"><i class="fa fa-edit fa-fw"></i>Edit</a>
-                            <a data-id="{{ tweetset.id }}" class="btn btn-xs btn-danger btn-tweetset-delete" href="#"><i class="fa fa-times fa-fw"></i>Remove</a>
+                            <a data-id="{{ tweetset.id }}" class="btn btn-xs btn-warning btn-tweetset-random col-lg-6" href="tweetset/random-tweet/{{tweetset.id}}"><i class="fa fa-fire fa-fw"></i>Randomize</a>
+                            <a data-id="{{ tweetset.id }}" class="btn btn-xs btn-primary btn-tweetset-edit col-lg-6" href="#"><i class="fa fa-edit fa-fw"></i>Edit</a>
+                            <a data-id="{{ tweetset.id }}" class="btn btn-xs btn-success btn-tweetset-view col-lg-6" href="tweetset/show-tweet/{{tweetset.id}}"><i class="fa fa-comment fa-fw"></i>Tweets</a>
+                            <a data-id="{{ tweetset.id }}" class="btn btn-xs btn-danger btn-tweetset-delete col-lg-6" href="#"><i class="fa fa-times fa-fw"></i>Remove</a>
                         </td>
                     </tr>
                     {% endfor %}
