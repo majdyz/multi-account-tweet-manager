@@ -19,6 +19,16 @@ class TweetController extends BaseController
         parent::__construct();
         Menu::get('admin_sidebar')->setActiveMenu('tweet');
     }
+
+    /** 
+    * sanitize input 
+    */
+    private function sanitize ($input) {
+        foreach ($input as $i => $value) {
+           $input[$i] = htmlspecialchars($value);
+        }
+        return $input;
+    }
     
     /**
      * display list of resource
@@ -105,12 +115,7 @@ class TweetController extends BaseController
         $code = 0;
         
         try {
-            $input = Input::put();
-
-            /** sanitize input */
-            foreach ($input as $i => $value) {
-                $input[$i] = htmlspecialchars($value);
-            }
+            $input = $this->sanitize(Input::put());
             
             /** in case request come from post http form */
             $input = is_null($input) ? Input::post() : $input;
@@ -153,14 +158,8 @@ class TweetController extends BaseController
         $success = false;
         
         try {
-            $input = Input::post();
+            $input = $this->sanitize(Input::post());
             $input['tweetset_id'] = $tweetset_id;
-
-            /** sanitize input */
-            foreach ($input as $i => $value) {
-                $input[$i] = htmlspecialchars($value);
-            }
-
             
             /* create a tweet */
             $tweet = Tweet::createTweet($tweetset_id,$input);

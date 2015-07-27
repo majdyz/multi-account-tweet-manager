@@ -28,14 +28,24 @@ class Tweet extends Model
     *  get all user's tweets
     */
     public static function getAllTweets($tweetset_id) {
-        return Tweet::where('tweetset_id', $tweetset_id)->get();
+        if (TweetSet::getOneTweetSet($tweetset_id)) {
+            return Tweet::where('tweetset_id', $tweetset_id)->get();
+        }
+        else {
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException;
+        }
     }
-    
+
     /**
     *  get one user's tweet
     */
     public static function getOneTweet($tweetset_id,$tweet_id) {
-        return Tweet::where('tweetset_id', $tweetset_id)->findOrFail($tweet_id);
+        if (TweetSet::getOneTweetSet($tweetset_id)) {
+            return Tweet::where('tweetset_id', $tweetset_id)->findOrFail($tweet_id);
+        }
+        else {
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException;
+        }
     }
 
 
@@ -43,27 +53,35 @@ class Tweet extends Model
     *  update tweet
     */
     public static function updateTweet($tweetset_id,$id,$input) {
-    	$tweet = Tweet::getOneTweet($tweetset_id,$id);
-    	$tweet->name = $input['name'];
-        $tweet->tweetset_id = $input['tweetset_id'];
-        $tweet->text = $input['text'];
-        $tweet->mentions = $input['mentions'];
-        $tweet->hashtags = $input['hashtags'];
-    
-    	return $tweet;
+        if (TweetSet::getOneTweetSet($tweetset_id)) {
+    	    $tweet = Tweet::getOneTweet($tweetset_id,$id);
+    	    $tweet->name = $input['name'];
+            $tweet->tweetset_id = $input['tweetset_id'];
+            $tweet->text = $input['text'];
+            $tweet->mentions = $input['mentions'];
+            $tweet->hashtags = $input['hashtags'];
+    	    return $tweet;
+        }
+        else {
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException;
+        }
     }
 
     /**
     * create tweet
     */
     public static function createTweet($tweetset_id,$input) {
-    	$tweet = new Tweet();
-        $tweet->name = $input['name'];
-        $tweet->tweetset_id = $input['tweetset_id'];
-        $tweet->text = $input['text'];
-        $tweet->mentions = $input['mentions'];
-        $tweet->hashtags = $input['hashtags'];
-    	
-    	return $tweet;
+        if (TweetSet::getOneTweetSet($tweetset_id)) {
+        	$tweet = new Tweet();
+            $tweet->name = $input['name'];
+            $tweet->tweetset_id = $input['tweetset_id'];
+            $tweet->text = $input['text'];
+            $tweet->mentions = $input['mentions'];
+            $tweet->hashtags = $input['hashtags'];
+    	    return $tweet;
+        }
+        else {
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException;
+        }
     }
 }
