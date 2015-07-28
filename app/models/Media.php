@@ -16,7 +16,7 @@ class Media extends Model
     protected $table = 'medias';
 
     public function tweets() {
-        return $this->belongsToMany('Tweet', 'TweetMedia', 'media_id', 'tweet_id');
+        return $this->belongsToMany('Tweet', 'tweet_media', 'media_id', 'tweet_id');
     }
 
     public static function upload($base64)

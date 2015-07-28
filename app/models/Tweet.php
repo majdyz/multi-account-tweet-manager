@@ -21,7 +21,7 @@ class Tweet extends Model
     }
 
     public function medias() {
-        return $this->belongsToMany('Media', 'TweetMedia', 'tweet_id', 'media_id');
+        return $this->belongsToMany('Media', 'tweet_media', 'tweet_id', 'media_id');
     }
 
     /**
