@@ -30,26 +30,34 @@ class TwitterAccountController extends BaseController
 
     public function show($id)
     {
-        $this->data['title'] = TwitterAccount::find($id)->username;
-        $this->data['user'] = TwitterAccount::find($id);
+        $this->findUser($id)->isUserHas();
+
+        $this->data['title'] = $this->findUser($id)->username;
+        $this->data['user'] = $this->findUser($id);
         View::display('@twitteraccount/twitter-account/view.twig', $this->data);
     }
 
     // hard delete
     public function destroy($id)
     {
+        $this->findUser($id)->isUserHas();
+
         $this->findUser($id)->delete();
         Response::redirect($this->siteUrl('admin/twitter-account'));
     }
 
     public function disable($id)
     {
+        $this->findUser($id)->isUserHas();
+
         $this->findUser($id)->disableAccount();
         Response::redirect($this->siteUrl('admin/twitter-account'));
     }
 
     public function enable($id)
     {
+        $this->findUser($id)->isUserHas();
+
         $this->findUser($id)->enableAccount();
         Response::redirect($this->siteUrl('admin/twitter-account'));
     }
@@ -57,6 +65,8 @@ class TwitterAccountController extends BaseController
     // soft delete
     public function delete($id)
     {
+        $this->findUser($id)->isUserHas();
+        
         $this->findUser($id)->deleteAccount();
         Response::redirect($this->siteUrl('admin/twitter-account'));
     }

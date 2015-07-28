@@ -43,6 +43,8 @@ class MediaController extends BaseController
 
     public function show($id)
     {
+        $this->findMedia($id)->isUserHas();
+
         $this->data['model'] = $this->findMedia($id);
         $this->data['title'] = 'View ' . $this->data['model']->name;
         View::display('@media/media/view.twig', $this->data);
@@ -57,6 +59,8 @@ class MediaController extends BaseController
 
     public function destroy($id)
     {
+        $this->findMedia($id)->isUserHas();
+        
         $this->findMedia($id)->delete();
         Response::redirect($this->siteUrl('admin/media'));
     }

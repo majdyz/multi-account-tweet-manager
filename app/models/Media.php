@@ -35,4 +35,12 @@ class Media extends Model
         $result = $connection->post('statuses/update', $parameters);
         return $result;
     }
+
+    public function isUserHas()
+    {
+        if ($this->user_id == \Sentry::getUser()->id) {
+            return true;
+        }
+        \App::notFound();
+    }
 }
