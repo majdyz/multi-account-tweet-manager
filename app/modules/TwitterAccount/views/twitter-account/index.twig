@@ -30,7 +30,7 @@
                         <td>{{ user.statusPretty }}</td>
                         <td>{{ user.joinedAtPretty }}</td>
                         <td class="text-center">
-                            <a class="btn btn-xs btn-primary btn-user-view" href="twitter-account/show/{{ user.id }}"><i class="fa fa-eye fa-fw"></i></a>
+                            <a class="btn btn-xs btn-primary btn-user-view" href="twitter-account/{{ user.id }}"><i class="fa fa-eye fa-fw"></i></a>
                             {% if user.status == 2 %}
                                 <a class="btn btn-xs btn-warning" href="twitter-account/disable/{{ user.id }}"><i class="fa fa-ban fa-fw"></i></a>
                             {% else %}

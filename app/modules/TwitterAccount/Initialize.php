@@ -38,7 +38,6 @@ class Initialize extends \SlimStarter\Module\Initializer{
 
     public function registerAdminRoute(){
         Route::resource('/twitter-account', 'TwitterAccount\Controllers\TwitterAccountController');
-        Route::get('/twitter-account/show/:id', 'TwitterAccount\Controllers\TwitterAccountController:show');
         Route::get('/twitter-account/destroy/:id', 'TwitterAccount\Controllers\TwitterAccountController:destroy');
         Route::get('/twitter-account/disable/:id', 'TwitterAccount\Controllers\TwitterAccountController:disable');
         Route::get('/twitter-account/enable/:id', 'TwitterAccount\Controllers\TwitterAccountController:enable');
