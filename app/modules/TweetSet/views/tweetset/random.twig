@@ -13,7 +13,10 @@
 </div>
 <div class = "col-lg-6">
     {% if error %}
-        <h4> {{ error }} </h4>
+        <div class = "well">
+            <h4 > {{ error }} </h4>
+            <a href="../../tweetset" class ="btn btn-primary"> Back to yout tweetset </a>
+        </div>
     {% else %}
         <div class="row">
             <div class="col-lg-12">
