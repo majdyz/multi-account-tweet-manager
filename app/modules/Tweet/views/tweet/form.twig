@@ -22,10 +22,13 @@
 
         <div id="tweet_media_title">
           <label for="media_id" class="col-lg-4 control-label">Media</label>
-          <div class="col-lg-8" id = "tweet_medias">
-            {% for media in medias %}
-              <input type="checkbox" name="media" id="tweet_media_{{media.id}}" value="{{media.id}}"> {{media.name}} ({{media.url}}) <br>
-            {% endfor %}
+          <div class="col-lg-8">
+            <select class="form-control" name="media" id="tweet_media">
+              <option value = {{0}}>-</option>
+              {% for media in medias %}
+                <option value = {{media.id}}>{{media.name}} ({{media.url}})</option>
+              {% endfor %}
+            </select>
           </div>
         </div>
 

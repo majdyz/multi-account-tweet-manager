@@ -88,8 +88,9 @@ class TweetController extends BaseController
                 
                 $tweetArray = $tweet->toArray();
 
+                /* find media */
                 if ($tweet->medias) {
-                    $tweetArray['medias'] = $tweet->medias->toArray();
+                    $tweetArray['media'] = $tweet->medias->first()->id;
                 }
             }
             catch(Exception $e) {
@@ -115,7 +116,7 @@ class TweetController extends BaseController
             $this->data['tweets'] = $tweet->toArray();
 
             if ($tweet->medias) {
-                $this->data['tweets']['media'] = $tweet->medias->toArray();
+                $this->data['tweets']['media'] = $tweet->medias->first()->id;
             }
             
             View::display('@tweet/tweet/edit.twig', $this->data);
@@ -143,17 +144,12 @@ class TweetController extends BaseController
             
             /** in case request come from post http form */
             $input = is_null($input) ? Input::post() : $input;
-
-            /* decode array checkbox */
-            $input['medias'] = json_decode($input['medias']);
             
             /** update tweet */
             $tweet = Tweet::updateTweet($tweetset_id,$id,$input);
 
-            $new_media = [];
-            foreach ($input['medias'] as $media) {
-                $new_media[] = Media::where('user_id',Sentry::getUser()->id)->find($media);
-            }
+            /* find media */
+            $media = Media::where('user_id',Sentry::getUser()->id)->find($input['media']);
        
             $tweet->save();
 
@@ -161,9 +157,7 @@ class TweetController extends BaseController
             $tweet->medias()->detach();
 
             /* link medias */
-            foreach ($new_media as $media) {
-                $tweet->medias()->attach($media);
-            }
+            $tweet->medias()->attach($media);
 
             $data = $this->sanitize($tweet->toArray());
             $data['tweetset_name'] = TweetSet::getOneTweetSet($tweet->tweetset_id)->name;
@@ -203,24 +197,17 @@ class TweetController extends BaseController
         try {
             $input = Input::post();
             $input['tweetset_id'] = $tweetset_id;
-            
-            /* decode array checkbox */
-            $input['medias'] = json_decode($input['medias']);
 
             /* create a tweet */
             $tweet = Tweet::createTweet($tweetset_id,$input);
             
-            $new_media = [];
-            foreach ($input['medias'] as $media) {
-                $new_media[] = Media::where('user_id',Sentry::getUser()->id)->find($media);
-            }
+            /* find media */
+            $media = Media::where('user_id',Sentry::getUser()->id)->find($input['media']);
 
             $tweet->save();
 
             /* link medias */
-            foreach ($new_media as $media) {
-                $tweet->medias()->attach($media);
-            }
+            $tweet->medias()->attach($media);
             
             $data = $this->sanitize($tweet->toArray());
             $data['tweetset_name'] = TweetSet::getOneTweetSet($tweet->tweetset_id)->name;
