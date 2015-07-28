@@ -33,7 +33,6 @@ class Initialize extends \SlimStarter\Module\Initializer{
     {
         Route::get('/connect/:id', 'TwitterAccount\Controllers\TwitterAccountController:add');
         Route::get('/connect/start/:id', 'TwitterAccount\Controllers\TwitterAccountController:connect');
-        // Route::get('/connect/finish/:id', 'TwitterAccount\Controllers\TwitterAccountController:finish');
         Route::get('/connect/success/:id', 'TwitterAccount\Controllers\TwitterAccountController:success');
     }
 

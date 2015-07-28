@@ -71,52 +71,38 @@ class TwitterAccountController extends BaseController
     public function connect($id)
     {
         $connection     = new TwitterOAuth(TwitterAccount::getCredentialsTwitter()['consumer_key'], TwitterAccount::getCredentialsTwitter()['consumer_secret']);
-        $request_token  = $connection->oauth("oauth/request_token", array("oauth_callback" => $this->siteUrl('connect/success/' . $id)));
+        $request_token  = $connection->oauth("oauth/request_token", array("oauth_callback" => $this->siteUrl('connect/success/' . $id )));
         $oauth_token    = $request_token['oauth_token'];
         $token_secret   = $request_token['oauth_token_secret'];
         $url            = $connection->url("oauth/authorize", ['oauth_token' => $oauth_token]);
-        setcookie("token_secret", " ", time()-3600);
-        setcookie("token_secret", $token_secret, time()+60*10);
-        setcookie("oauth_token", " ", time()-3600);
-        setcookie("oauth_token", $oauth_token, time()+60*10);
+        $account = new TwitterAccount;
+        $account->oauth_token = $oauth_token;
+        $account->oauth_token_secret = $token_secret;
+        $account->save();
+
         Response::redirect($url);
     }
 
-    // public function finish($id)
-    // {
-    //     $connection = new TwitterOAuth(TwitterAccount::getCredentialsTwitter()['consumer_key'], TwitterAccount::getCredentialsTwitter()['consumer_secret'], $_COOKIE['oauth_token'], $_COOKIE['token_secret']);
-    //     $access_token = $connection->oauth("oauth/access_token", ["oauth_verifier" => $_GET['oauth_verifier']]);
-    //     if (( $account = TwitterAccount::where('username', $access_token['screen_name'])->first()) == null ) {
-    //         $account = new TwitterAccount;
-    //         $account->username = $access_token['screen_name'];
-    //         $account->oauth_token = $access_token['oauth_token'];
-    //         $account->oauth_token_secret = $access_token['oauth_token_secret'];
-    //         $account->joined_at = time();
-    //         $account->status = 2;
-    //         $account->save();
-    //         $account->users()->save(\User::find(Sentry::getUser()->id));
-    //     }
-    //     Response::redirect($this->siteUrl('connect/success/' . $account->id));
-    // }
-
     public function success($id)
     {
-        var_dump($_COOKIE); var_dump($request_token); die();
-        $connection = new TwitterOAuth(TwitterAccount::getCredentialsTwitter()['consumer_key'], TwitterAccount::getCredentialsTwitter()['consumer_secret'], $_COOKIE['oauth_token'], $_COOKIE['token_secret']);
-        $access_token = $connection->oauth("oauth/access_token", ["oauth_verifier" => $_GET['oauth_verifier']]);
-        if (TwitterAccount::where('username', $access_token['screen_name'])->first() == null ) {
-            $account = new TwitterAccount;
+        $account = TwitterAccount::where('oauth_token', '=', $_GET['oauth_token'])->first();
+        if ($account != null) {
+            
+            $connection = new TwitterOAuth(TwitterAccount::getCredentialsTwitter()['consumer_key'], TwitterAccount::getCredentialsTwitter()['consumer_secret'], $account->oauth_token, $account->oauth_token_secret);
+            $access_token = $connection->oauth("oauth/access_token", ["oauth_verifier" => $_GET['oauth_verifier']]);
+            
             $account->username = $access_token['screen_name'];
+            $account->joined_at = time();
             $account->oauth_token = $access_token['oauth_token'];
             $account->oauth_token_secret = $access_token['oauth_token_secret'];
-            $account->joined_at = time();
             $account->status = 3;
             $account->save();
             $account->users()->save(\User::find($id));
         }
 
+
         $this->data['title'] = 'Successfully';
-        $this->data['account'] = TwitterAccount::find($id);
+        $this->data['account'] = TwitterAccount::find($account->id);
         if ($this->data['account'] == null) {
             App::notFound();
         }
