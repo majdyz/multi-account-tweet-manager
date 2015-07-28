@@ -48,4 +48,4 @@ foreach (Module::getModules() as $module) {
 }
 
 /** default routing */
-Route::get('/', 'HomeController:welcome');
+Route::get('/', 'Admin\AdminController:login');
