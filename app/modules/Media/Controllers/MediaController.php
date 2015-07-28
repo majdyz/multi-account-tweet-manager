@@ -11,6 +11,7 @@ use \Media;
 use \TweetMedia;
 use \TwitterAccount;
 use \User;
+use \Response;
 
 class MediaController extends BaseController
 {
@@ -23,51 +24,47 @@ class MediaController extends BaseController
 
     public function index()
     {
-        var_dump(User::find(\Sentry::getUser()->id)->twitterAccounts); die();
-        $connection = new TwitterOAuth(
-            TwitterAccount::getCredentialsTwitter()['consumer_key'],
-            TwitterAccount::getCredentialsTwitter()['consumer_secret'],
-            TwitterAccount::getCredentialsTwitter()['oauth_token'],
-            TwitterAccount::getCredentialsTwitter()['oauth_token_secret']);
-        $media1 = $connection->upload('media/upload', array('media' => 'http://cdn-2.tstatic.net/jabar/foto/bank/images/kucing-berdoa.jpg'));
-        $parameters = array(
-            'status' => 'Meow Meow Meow',
-            'media_ids' => implode(',', array($media1->media_id_string)),
-        );
-        $result = $connection->post('statuses/update', $parameters);
-        var_dump($result); die();
-
         $this->data['title'] = 'Media';
+        $this->data['medias'] = Media::all()->toArray();
         View::display('@media/media/index.twig', $this->data);
     }
 
-    public function show()
+    public function upload()
     {
-        
+        $base64 = str_replace(' ', '+', $_POST['base64']);
+        $url = Media::upload($base64);
+        $media = new Media;
+        $media->name = $_POST['name'];
+        $media->url = $url->text;
+        $media->save();
+        Response::redirect($this->siteUrl('admin/media/show/' . $media->id));
     }
 
-    public function store()
+    public function show($id)
     {
-
+        $this->data['model'] = $this->findMedia($id);
+        $this->data['title'] = 'View ' . $this->data['model']->name;
+        View::display('@media/media/view.twig', $this->data);
     }
 
     public function create()
     {
-
+        $this->loadJs('app/upload.js');
+        $this->data['title'] = 'Upload Media';
+        View::display('@media/media/create.twig', $this->data);
     }
 
-    public function edit()
+    public function destroy($id)
     {
-
+        $this->findMedia($id)->delete();
+        Response::redirect($this->siteUrl('admin/media'));
     }
 
-    public function update()
+    protected function findMedia($id)
     {
-
-    }
-
-    public function destroy()
-    {
-
+        if (($model = Media::find($id)) != null) {
+            return $model;
+        }
+        App::notFound();
     }
 }

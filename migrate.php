@@ -195,7 +195,7 @@ class Migrator{
             {
                 $table->increments('id');
                 $table->string('name');
-                $table->integer('size');
+                $table->string('url');
                 $table->timestamp('updated_at')->nullable();
                 $table->timestamp('created_at')->nullable();
 
