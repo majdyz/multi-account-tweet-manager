@@ -17,7 +17,7 @@
                         <th>#</th>
                         <th>First Name</th>
                         <th>Last Name</th>
-                        <th>Email Address</th>
+                        <th>Username</th>
                         <th style="width:15%" class="text-center">Action</th>
                     </tr>
                 </thead>
@@ -27,7 +27,7 @@
                         <td>{{ user.id }}</td>
                         <td>{{ user.first_name }}</td>
                         <td>{{ user.last_name }}</td>
-                        <td>{{ user.email }}</td>
+                        <td>{{ user.username }}</td>
                         <td class="text-center">
                             <a data-id="{{ user.id }}" class="btn btn-xs btn-primary btn-user-edit" href="#"><i class="fa fa-edit fa-fw"></i>Edit</a>
                             <a data-id="{{ user.id }}" class="btn btn-xs btn-danger btn-user-delete" href="#"><i class="fa fa-times fa-fw"></i>Remove</a>

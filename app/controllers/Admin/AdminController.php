@@ -38,13 +38,13 @@ class AdminController extends BaseController
     public function doLogin()
     {
         $remember = Input::post('remember', false);
-        $email    = Input::post('email');
+        $username    = Input::post('username');
         $redirect = Input::post('redirect');
         $redirect = ($redirect) ? $redirect : 'admin';
 
         try{
             $credential = array(
-                'email'     => $email,
+                'username'     => $username,
                 'password'  => Input::post('password')
             );
 
@@ -60,7 +60,7 @@ class AdminController extends BaseController
             Response::redirect($this->siteUrl($redirect));
         }catch(\Exception $e){
             App::flash('message', $e->getMessage());
-            App::flash('email', $email);
+            App::flash('username', $username);
             App::flash('redirect', $redirect);
             App::flash('remember', $remember);
 

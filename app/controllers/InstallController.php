@@ -168,7 +168,7 @@ CONFIG;
             Capsule::schema()->create('users', function($table)
             {
                 $table->increments('id');
-                $table->string('email');
+                $table->string('username');
                 $table->string('password');
                 $table->text('permissions')->nullable();
                 $table->boolean('activated')->default(0);
@@ -184,7 +184,7 @@ CONFIG;
                 // We'll need to ensure that MySQL uses the InnoDB engine to
                 // support the indexes, other engines aren't affected.
                 $table->engine = 'InnoDB';
-                $table->unique('email');
+                $table->unique('username');
                 $table->index('activation_code');
                 $table->index('reset_password_code');
             });
@@ -256,7 +256,7 @@ CONFIG;
     {
         try{
             Sentry::createUser(array(
-                'email'       => 'admin@admin.com',
+                'username'       => 'admin',
                 'password'    => 'password',
                 'first_name'  => 'Website',
                 'last_name'   => 'Administrator',

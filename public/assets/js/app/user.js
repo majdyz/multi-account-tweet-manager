@@ -126,7 +126,7 @@ $(function(){
                                 '<td>'+user.id+'</td>'+
                                 '<td>'+user.first_name+'</td>'+
                                 '<td>'+user.last_name+'</td>'+
-                                '<td>'+user.email+'</td>'+
+                                '<td>'+user.username+'</td>'+
                                 '<td class="text-center">'+
                                     '<a data-id="'+user.id+'" class="btn btn-xs btn-primary btn-user-edit" href="#"><i class="fa fa-edit fa-fw"></i>Edit</a>'+
                                     '<a data-id="'+user.id+'" class="btn btn-xs btn-danger btn-user-delete" href="#" style="margin-left: 5px"><i class="fa fa-times fa-fw"></i>Remove</a>'+
@@ -137,7 +137,7 @@ $(function(){
                         var $fields = $('#user-row-'+resp.data.id+' td');
                         $($fields[1]).html(user.first_name);
                         $($fields[2]).html(user.last_name);
-                        $($fields[3]).html(user.email);
+                        $($fields[3]).html(user.username);
                     }
 
                     /** reset the form and hide modal form */

@@ -121,7 +121,7 @@ class UserController extends BaseController
 
             $user = Sentry::findUserById($id);
 
-            $user->email        = $input['email'];
+            $user->username     = $input['username'];
             $user->first_name   = $input['first_name'];
             $user->last_name    = $input['last_name'];
 
@@ -172,7 +172,7 @@ class UserController extends BaseController
             }
 
             $user = Sentry::createUser(array(
-                'email'       => $input['email'],
+                'username'       => $input['username'],
                 'password'    => $input['password'],
                 'first_name'  => $input['first_name'],
                 'last_name'   => $input['last_name'],
