@@ -115,7 +115,7 @@ class TweetSetController extends BaseController
             foreach ($input as $data) {
                 $account = $data['account'];
                 $tweet   = Tweet::getOneTweet($tweetset_id,$data['tweet']['id']);
-                $media   = $tweet->getMediaUrl();
+                $media   = $tweet->getMediaText();
                 $tweet   = $tweet->toArray();
                 $tweet['media'] = $media;
                 $message = $tweet['text'];
