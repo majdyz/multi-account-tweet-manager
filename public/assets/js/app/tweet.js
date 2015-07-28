@@ -49,6 +49,7 @@ $(function(){
 
                 for(var a in $tweet){
                     $('#tweet_'+a).val($tweet[a]);
+                    console.log(a+","+$tweet[a]);
                 }
 
                 $('#btn-tweet-save').attr('data-method', 'PUT');
@@ -135,6 +136,7 @@ $(function(){
                                 '<td>'+tweet.text+'</td>'+
                                 '<td>'+tweet.mentions+'</td>'+
                                 '<td>'+tweet.hashtags+'</td>'+
+                                '<td>'+tweet.media+'</td>'+
                                 '<td>'+tweet.updated_at+'</td>'+
                                 '<td>'+tweet.created_at+'</td>'+
                                 '<td class="text-center">'+
@@ -144,6 +146,7 @@ $(function(){
                             '</tr>'
                         );
                     }else{
+
                         var $fields = $('#tweet-row-'+resp.data.id+' td');
                         if (tweet.tweetset_id != global.tweetset_id) {
                             $fields.hide();
@@ -152,8 +155,9 @@ $(function(){
                         $($fields[2]).html(tweet.text);
                         $($fields[3]).html(tweet.mentions);
                         $($fields[4]).html(tweet.hashtags);
-                        $($fields[5]).html(tweet.updated_at);
-                        $($fields[6]).html(tweet.created_at);
+                        $($fields[5]).html(tweet.media);
+                        $($fields[6]).html(tweet.updated_at);
+                        $($fields[7]).html(tweet.created_at);
                     }
 
                     /** reset the form and hide modal form */

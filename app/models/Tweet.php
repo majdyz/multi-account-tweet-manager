@@ -20,9 +20,33 @@ class Tweet extends Model
         return $this->belongsTo('TweetSet');
     }
 
+    /**
+    *   get all medias
+    */
     public function medias() {
         return $this->belongsToMany('Media', 'tweet_media', 'tweet_id', 'media_id');
     }
+
+    /**
+    *   get all media url
+    */
+    public function getMediaUrl() {
+        $first = true;
+        $medias = $this->medias;
+        $ret = "";
+        foreach($medias as $media) {
+            if (!$first) {
+                $ret = $ret . "\n" . $media->url;
+            }
+            else {
+                $ret = $media->url;
+                $first = false;
+            }
+        }
+        return $ret;
+    }
+
+    
 
     /**
     *  get all user's tweets
