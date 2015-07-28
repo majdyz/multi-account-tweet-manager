@@ -28,9 +28,9 @@ class Tweet extends Model
     }
 
     /**
-    *   get all media url
+    *   get all media text
     */
-    public function getMediaUrl() {
+    public function getMediaText() {
         $first = true;
         $medias = $this->medias;
         $ret = "";
@@ -40,6 +40,25 @@ class Tweet extends Model
             }
             else {
                 $ret = $media->url;
+                $first = false;
+            }
+        }
+        return $ret;
+    }
+
+    /**
+    *   get all media url
+    */
+    public function getMediaUrl() {
+        $first = true;
+        $medias = $this->medias;
+        $ret = "";
+        foreach($medias as $media) {
+            if (!$first) {
+                $ret = $ret . "\n" .$media->name . '(' . $media->url .')';
+            }
+            else {
+                $ret = $media->name . '(' . $media->url . ')';
                 $first = false;
             }
         }
