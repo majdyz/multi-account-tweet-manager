@@ -37,7 +37,7 @@ class TweetController extends BaseController
         $this->data['title'] = TweetSet::getOneTweetSet($tweetset_id)->name."'s Tweets";
         $this->data['tweets'] = Tweet::getAllTweets($tweetset_id)->toArray();
         $this->data['tweetsets'] = TweetSet::getAllTweetSets()->toArray();
-
+        $this->data['tweetset_id'] = $tweetset_id;
 
         /*querying name of tweet*/
         foreach ($this->data['tweets'] as $i => $tweet) {
