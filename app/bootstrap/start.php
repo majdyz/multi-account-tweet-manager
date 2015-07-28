@@ -66,7 +66,7 @@ if(!defined('INSTALL')){
     /** disregard sentry configuration on install */
     $config['aliases']['Sentry'] = 'Cartalyst\Sentry\Facades\Native\Sentry';
 
-    $starter->bootFacade($config['aliases']);
+    $starter->boot();
 }
 
 return $starter;

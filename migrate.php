@@ -5,16 +5,25 @@ define('APP_PATH'   , __DIR__.'/app/');
 $config = array();
 require __DIR__.'/vendor/autoload.php';
 require __DIR__.'/app/config/database.php';
+require __DIR__.'/app/config/sentry.php';
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Cartalyst\Sentry\Facades\Native\Sentry;
 
+use \Cartalyst\Sentry\Hashing\BcryptHasher;
+use \Cartalyst\Sentry\Hashing\NativeHasher;
+use \Cartalyst\Sentry\Hashing\Sha256Hasher;
+use \Cartalyst\Sentry\Hashing\WhirlpoolHasher;
+use \Cartalyst\Sentry\Users\Eloquent\Provider as UserProvider;
+
 class Migrator{
 
     protected $config;
+    protected $sentry_config;
 
-    public function __construct($config){
+    public function __construct($config, $sentry_config){
         $this->config = $config;
+        $this->sentry_config = $sentry_config;
         $this->makeConnection($config);
     }
 
@@ -29,11 +38,80 @@ class Migrator{
             $capsule->setAsGlobal();
             $capsule->bootEloquent();
 
+            Sentry::createSentry(
+                $this->userProviderFactory(
+                    $this->hasherProviderFactory($this->sentry_config), 
+                    $this->sentry_config
+                )
+            );
             Sentry::setupDatabaseResolver($capsule->connection()->getPdo());
 
         }catch(Exception $e){
             throw $e;
         }
+    }
+
+    /** Sentry specific factory, adopted from SentryServiceProvider */
+    protected function hasherProviderFactory($config){
+        $hasher  = $config['hasher'];
+        switch ($hasher)
+        {
+            case 'native':
+                return new NativeHasher;
+                break;
+
+            case 'bcrypt':
+                return new BcryptHasher;
+                break;
+
+            case 'sha256':
+                return new Sha256Hasher;
+                break;
+
+            case 'whirlpool':
+                return new WhirlpoolHasher;
+                break;
+        }
+
+        throw new \InvalidArgumentException("Invalid hasher [$hasher] chosen for Sentry.");
+    }
+
+    protected function userProviderFactory($hasher, $config){
+            $model = $config['users']['model'];
+
+            if (method_exists($model, 'setLoginAttributeName'))
+            {
+                $loginAttribute = $config['users']['login_attribute'];
+
+                forward_static_call_array(
+                    array($model, 'setLoginAttributeName'),
+                    array($loginAttribute)
+                );
+            }
+
+            // Define the Group model to use for relationships.
+            if (method_exists($model, 'setGroupModel'))
+            {
+                $groupModel = $config['groups']['model'];
+
+                forward_static_call_array(
+                    array($model, 'setGroupModel'),
+                    array($groupModel)
+                );
+            }
+
+            // Define the user group pivot table name to use for relationships.
+            if (method_exists($model, 'setUserGroupsPivot'))
+            {
+                $pivotTable = $config['user_groups_pivot_table'];
+
+                forward_static_call_array(
+                    array($model, 'setUserGroupsPivot'),
+                    array($pivotTable)
+                );
+            }
+
+            return new UserProvider($hasher, $model);
     }
 
     /**
@@ -265,7 +343,7 @@ class Migrator{
     }
 }
 
-$migrator = new Migrator($config['database']['connections'][$config['database']['default']]);
+$migrator = new Migrator($config['database']['connections'][$config['database']['default']], $config['sentry']);
 
 $migrator->migrate();
 $migrator->seed();
