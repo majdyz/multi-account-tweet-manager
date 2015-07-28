@@ -12,6 +12,7 @@ use \Request;
 use \Response;
 use \Tweet;
 use \Sentry;
+use \Media;
 use \Exception;
 use \Admin\BaseController;
 use Abraham\TwitterOAuth\TwitterOAuth;
@@ -87,11 +88,13 @@ class TweetSetController extends BaseController
         
         /** publish necessary js  variable */
         $this->publish('random_result', $results);
+        $this->publish('tweetset_id', $tweetset_id);
         $this->publish('baseUrl', $this->data['baseUrl']);
 
         View::display('@tweetset/tweetset/random.twig', $this->data);
 
         /** unpublish necessary js  variable */
+        $this->unpublish('tweetset_id', $tweetset_id);
         $this->unpublish('baseUrl', $this->data['baseUrl']);
         $this->unpublish('random_result');
     }
@@ -107,10 +110,14 @@ class TweetSetController extends BaseController
         
         try {
             $input = Input::post()['value'];
+            $tweetset_id = Input::post()['tweetset_id'];
 
             foreach ($input as $data) {
                 $account = $data['account'];
-                $tweet   = $data['tweet'];
+                $tweet   = Tweet::getOneTweet($tweetset_id,$data['tweet']['id']);
+                $media   = $tweet->getMediaUrl();
+                $tweet   = $tweet->toArray();
+                $tweet['media'] = $media;
                 $message = $tweet['text'];
 
                 /** check wether the user own the account */
@@ -135,6 +142,10 @@ class TweetSetController extends BaseController
 
                 if (strlen($tweet['hashtags']) > 0) {
                     $tweet_text = $tweet_text . "\n" . $tweet['hashtags'];
+                }  
+
+                if (strlen($tweet['media']) > 0) {
+                    $tweet_text = $tweet_text . "\n" . $tweet['media'];
                 }  
 
                 $success_now = $connection->post("statuses/update", array(
@@ -197,17 +208,31 @@ class TweetSetController extends BaseController
         $this->data['title'] = TweetSet::getOneTweetSet($tweetset_id)->name."'s Tweets";
         $this->data['tweets'] = Tweet::getAllTweets($tweetset_id)->toArray();
         $this->data['tweetsets'] = TweetSet::getAllTweetSets()->toArray();
+        $this->data['medias'] = Media::where('user_id',Sentry::getUser()->id)->get()->toArray();
         $this->data['tweetset_id'] = $tweetset_id;
 
-
-        /*querying name of tweet*/
+        /*querying name of tweet and medias*/
         foreach ($this->data['tweets'] as $i => $tweet) {
             try {
-                $tweet = TweetSet::getOneTweetSet($tweet['tweetset_id']);
-                $this->data['tweets'][$i]['tweetset_name'] = $tweet->name;
+                $tweetset = TweetSet::getOneTweetSet($tweet['tweetset_id']);
+                $this->data['tweets'][$i]['tweetset_name'] = $tweetset->name;
             }
             catch (Exception $ex) {
                 $this->data['tweets'][$i]['tweetset_name'] = "-N/A-";
+            }
+            
+            $tweet = Tweet::getOneTweet($tweetset_id,$tweet['id']);
+            $medias = $tweet->medias;
+
+            $first = true;
+            foreach($medias as $media) {
+                if (!$first) {
+                    $this->data['tweets'][$i]['media'] = $this->data['tweets'][$i]['media'] . "\n" . $media->url;
+                }
+                else {
+                    $this->data['tweets'][$i]['media'] = $media->url;
+                    $first = false;
+                }
             }
         }
 
@@ -257,10 +282,10 @@ class TweetSetController extends BaseController
         $code = 0;
         
         try {
-            $input = $this->sanitize(Input::put());
+            $input = Input::put();
 
             /** in case request come from post http form */
-            $input = is_null($input) ? $this->sanitize(Input::post()) : $input;
+            $input = is_null($input) ? Input::post() : $input;
             
            
             /* update tweetset */
@@ -281,7 +306,7 @@ class TweetSetController extends BaseController
         
         if (Request::isAjax()) {
             Response::headers()->set('Content-Type', 'application/json');
-            Response::setBody(json_encode(array('success' => $success, 'data' => ($tweetset) ? $tweetset->toArray() : $tweetset, 'message' => $message, 'code' => $code)));
+            Response::setBody(json_encode(array('success' => $success, 'data' => ($tweetset) ? $this->sanitize($tweetset->toArray()) : $tweetset, 'message' => $message, 'code' => $code)));
         } 
         else {
             Response::redirect($this->siteUrl('admin/tweetset/' . $id . '/edit'));
@@ -298,7 +323,7 @@ class TweetSetController extends BaseController
         $success = false;
         
         try {
-            $input = $this->sanitize(Input::post());
+            $input = Input::post();
 
             /* create new tweetset */
             $tweetset = TweetSet::createTweetSet($input);
@@ -312,7 +337,7 @@ class TweetSetController extends BaseController
         
         if (Request::isAjax()) {
             Response::headers()->set('Content-Type', 'application/json');
-            Response::setBody(json_encode(array('success' => $success, 'data' => ($tweetset) ? $tweetset->toArray() : $tweetset, 'message' => $message, 'code' => $success ? 200 : 500)));
+            Response::setBody(json_encode(array('success' => $success, 'data' => ($tweetset) ? $this->sanitize($tweetset->toArray()) : $tweetset, 'message' => $message, 'code' => $success ? 200 : 500)));
         } 
         else {
             Response::redirect($this->siteUrl('admin/tweetset'));

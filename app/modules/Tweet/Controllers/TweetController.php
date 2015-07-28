@@ -6,10 +6,12 @@ use \View;
 use \Menu;
 use \Input;
 use \Tweet;
+use \Media;
 use \TweetSet;
 use \Request;
 use \Response;
 use \Exception;
+use \Sentry;
 use \Admin\BaseController;
 
 class TweetController extends BaseController
@@ -29,6 +31,7 @@ class TweetController extends BaseController
         }
         return $input;
     }
+
     
     /**
      * display list of resource
@@ -37,17 +40,25 @@ class TweetController extends BaseController
         $this->data['title'] = TweetSet::getOneTweetSet($tweetset_id)->name."'s Tweets";
         $this->data['tweets'] = Tweet::getAllTweets($tweetset_id)->toArray();
         $this->data['tweetsets'] = TweetSet::getAllTweetSets()->toArray();
+        $this->data['medias'] = Media::where('user_id',Sentry::getUser()->id)->get()->toArray();
         $this->data['tweetset_id'] = $tweetset_id;
 
-        /*querying name of tweet*/
+        /*querying name of tweet and medias*/
         foreach ($this->data['tweets'] as $i => $tweet) {
             try {
-                $tweet = TweetSet::getOneTweetSet($tweet['tweetset_id']);
-                $this->data['tweets'][$i]['tweetset_name'] = $tweet->name;
+                $tweetset = TweetSet::getOneTweetSet($tweet['tweetset_id']);
+                $this->data['tweets'][$i]['tweetset_name'] = $tweetset->name;
             }
             catch (Exception $ex) {
                 $this->data['tweets'][$i]['tweetset_name'] = "-N/A-";
             }
+            
+            $tweet = Tweet::getOneTweet($tweetset_id,$tweet['id']);
+            $medias = $tweet->medias;
+
+            $this->data['tweets'][$i]['media'] = $tweet->getMediaUrl();
+
+            
         }
 
         /** load the tweet.js app */
@@ -59,6 +70,9 @@ class TweetController extends BaseController
         
         /** render the template */
         View::display('@tweet/tweet/index.twig', $this->data);
+
+        /** unpublish necessary js  variable */
+        $this->unpublish('tweetset_id', $tweetset_id);
     }
     
     /**
@@ -71,13 +85,19 @@ class TweetController extends BaseController
             
             try {
                 $tweet = Tweet::getOneTweet($tweetset_id,$id);
+                if (!is_null($tweet)) {
+                    $tweetArray = $tweet->toArray();
+                    if ($tweet->medias) {
+                        $this->data['tweets']['media'] = $tweet->medias->first()->id;
+                    }
+                }
             }
             catch(Exception $e) {
                 $message = $e->getMessage();
             }
             
             Response::headers()->set('Content-Type', 'application/json');
-            Response::setBody(json_encode(array('success' => !is_null($tweet), 'data' => !is_null($tweet) ? $tweet->toArray() : $tweet, 'message' => $message, 'code' => is_null($tweet) ? 404 : 200)));
+            Response::setBody(json_encode(array('success' => !is_null($tweet), 'data' => !is_null($tweet) ? $tweetArray : $tweet, 'message' => $message, 'code' => is_null($tweet) ? 404 : 200)));
         } 
         else {
         }
@@ -93,6 +113,10 @@ class TweetController extends BaseController
             /** display edit form in non-ajax request */
             $this->data['title'] = 'Edit Tweet';
             $this->data['tweets'] = $tweet->toArray();
+
+            if ($tweet->medias) {
+                $this->data['tweets']['media'] = $tweet->medias->first()->id;
+            }
             
             View::display('@tweet/tweet/edit.twig', $this->data);
         }
@@ -115,20 +139,31 @@ class TweetController extends BaseController
         $code = 0;
         
         try {
-            $input = $this->sanitize(Input::put());
+            $input = Input::put();
             
             /** in case request come from post http form */
             $input = is_null($input) ? Input::post() : $input;
             
             /** update tweet */
             $tweet = Tweet::updateTweet($tweetset_id,$id,$input);
+            $media = Media::where('user_id',Sentry::getUser()->id)->find($input['media']);
             
-            $success = $tweet->save();
-            $code = 200;
-            $message = 'Tweet updated sucessully';
+            $tweet->save();
 
-            $data = $tweet->toArray();
+            /* unlink all media */
+            $tweet->medias()->detach();
+
+            /* link media */
+            $tweet->medias()->attach($media);
+
+
+            $data = $this->sanitize($tweet->toArray());
             $data['tweetset_name'] = TweetSet::getOneTweetSet($tweet->tweetset_id)->name;
+            $data['media'] = $tweet->getMediaUrl();
+
+            $code = 200;
+            $message = 'Tweet updated successfully';
+            $success = true;
         }
         catch(NotFoundException $e) {
             $message = $e->getMessage();
@@ -158,18 +193,26 @@ class TweetController extends BaseController
         $success = false;
         
         try {
-            $input = $this->sanitize(Input::post());
+            $input = Input::post();
             $input['tweetset_id'] = $tweetset_id;
             
             /* create a tweet */
             $tweet = Tweet::createTweet($tweetset_id,$input);
+            $media = Media::where('user_id',Sentry::getUser()->id)->find($input['media']);
             
-            $success = $tweet->save();
-            
-            $message = 'Tweet created successfully';
+            $tweet->save();
 
-            $data = $tweet->toArray();
+            /* link media */
+            $tweet->medias()->attach($media);
+            
+
+            $data = $this->sanitize($tweet->toArray());
             $data['tweetset_name'] = TweetSet::getOneTweetSet($tweet->tweetset_id)->name;
+            $data['media'] = $tweet->getMediaUrl();
+            
+            $code = 200;
+            $message = 'Tweet created successfully';
+            $success = true;
         }
         catch(Exception $e) {
             $message = $e->getMessage();

@@ -8,6 +8,7 @@ $(function(){
 
         var $button = $(this),
             $random_result = global.random_result,
+            $tweetset_id = global.tweetset_id,
             $url = global.baseUrl+'admin/tweetset/post-tweet';
 
 
@@ -17,7 +18,7 @@ $(function(){
 
         $.ajax({
             url: $url,
-            data: {'value' : $random_result},
+            data: {'value' : $random_result, 'tweetset_id' : $tweetset_id},
             method : 'POST',
             success: function(resp){
 
