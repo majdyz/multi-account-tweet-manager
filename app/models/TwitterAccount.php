@@ -80,4 +80,12 @@ class TwitterAccount extends Model
         $array['joinedAtPretty'] = $this->joinedAtPretty;
         return $array;
     }
+
+    public function isUserHas()
+    {
+        if ($this->users()->where('id', \Sentry::getUser()->id)->first() != null) {
+            return true;
+        }
+        \App::notFound();
+    }
 }
