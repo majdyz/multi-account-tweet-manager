@@ -31,8 +31,6 @@ class Initialize extends \SlimStarter\Module\Initializer{
 
     public function registerAdminRoute(){
         Route::resource('/media', 'Media\Controllers\MediaController');
-        Route::get('/media/create', 'Media\Controllers\MediaController:create');
-        Route::get('/media/show/:id', 'Media\Controllers\MediaController:show');
         Route::get('/media/destroy/:id', 'Media\Controllers\MediaController:destroy');
         Route::post('/media/upload', 'Media\Controllers\MediaController:upload');
     }

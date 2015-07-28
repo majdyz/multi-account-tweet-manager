@@ -35,7 +35,7 @@
                         <td>{{ media.created_at }}</td>
                         <td>{{ media.updated_at }}</td>
                         <td class="text-center">
-                            <a class="btn btn-xs btn-primary btn-user-view" href="media/show/{{ media.id }}"><i class="fa fa-eye fa-fw"></i></a>
+                            <a class="btn btn-xs btn-primary btn-user-view" href="media/{{ media.id }}"><i class="fa fa-eye fa-fw"></i></a>
                             <a onclick="if (confirm('Are you sure want to delete this media?') == false) return false" class="btn btn-xs btn-danger btn-user-delete" href="media/destroy/{{ media.id }}"><i class="fa fa-times fa-fw"></i></a>
                         </td>
                     </tr>
