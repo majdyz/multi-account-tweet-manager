@@ -11,6 +11,11 @@ class User extends Model {
         return $this->belongsToMany('TwitterAccount', 'twitteraccount_user', 'user_id', 'twitter_id');
     }
 
+    public function medias()
+    {
+        return $this->hasMany('Media');
+    }
+
     public static function getActiveAccounts() {
     	return User::find(Sentry::getUser()->id)->twitterAccounts()->where('status', '>', 1)->get();
     }

@@ -25,7 +25,7 @@ class MediaController extends BaseController
     public function index()
     {
         $this->data['title'] = 'Media';
-        $this->data['medias'] = Media::all()->toArray();
+        $this->data['medias'] = User::find(\Sentry::getUser()->id)->medias()->get();
         View::display('@media/media/index.twig', $this->data);
     }
 
@@ -36,6 +36,7 @@ class MediaController extends BaseController
         $media = new Media;
         $media->name = $_POST['name'];
         $media->url = $url->text;
+        $media->user_id = \Sentry::getUser()->id;
         $media->save();
         Response::redirect($this->siteUrl('admin/media/show/' . $media->id));
     }
