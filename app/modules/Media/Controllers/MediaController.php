@@ -38,7 +38,7 @@ class MediaController extends BaseController
         $media->url = $url->text;
         $media->user_id = \Sentry::getUser()->id;
         $media->save();
-        Response::redirect($this->siteUrl('admin/media/show/' . $media->id));
+        Response::redirect($this->siteUrl('admin/media/' . $media->id));
     }
 
     public function show($id)
@@ -60,7 +60,7 @@ class MediaController extends BaseController
     public function destroy($id)
     {
         $this->findMedia($id)->isUserHas();
-        
+
         $this->findMedia($id)->delete();
         Response::redirect($this->siteUrl('admin/media'));
     }
