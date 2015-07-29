@@ -7,8 +7,8 @@ use \TwitterAccount;
 /**
  * integer $id
  * string $name
- * integer $media_id
- * integer $media_id_string
+ * string $media_id
+ * string $media_id_string
  * integer $size
  * integer $w
  * integer $h

@@ -273,8 +273,8 @@ class Migrator{
             {
                 $table->increments('id');
                 $table->string('name');
-                $table->integer('media_id');
-                $table->integer('media_id_string');
+                $table->string('media_id');
+                $table->string('media_id_string');
                 $table->integer('size');
                 $table->integer('w');
                 $table->integer('h');

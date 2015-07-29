@@ -33,6 +33,7 @@ class MediaController extends BaseController
     {
         $base64 = str_replace(' ', '+', $_POST['base64']);
         $file = Media::upload($base64);
+        // var_dump($file->media_id); die();
         $media = new Media;
         $media->name = $_POST['name'];
         $media->media_id = $file->media_id;
