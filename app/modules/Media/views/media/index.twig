@@ -20,7 +20,7 @@
                     <tr>
                         <th>#</th>
                         <th>Name</th>
-                        <th>Url</th>
+                        <th>Media Id</th>
                         <th>Created At</th>
                         <th>Updated At</th>
                         <th style="width:15%" class="text-center">Action</th>
@@ -31,7 +31,7 @@
                     <tr id="user-row-{{ user.id }}">
                         <td>{{ i+1 }}</td>
                         <td>{{ media.name }}</td>
-                        <td><a href="{{ media.url }}">{{ media.url }}</a></td>
+                        <td>{{ media.media_id }}</td>
                         <td>{{ media.created_at }}</td>
                         <td>{{ media.updated_at }}</td>
                         <td class="text-center">

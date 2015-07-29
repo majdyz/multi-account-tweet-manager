@@ -273,7 +273,7 @@ class Migrator{
             {
                 $table->increments('id');
                 $table->string('name');
-                $table->string('url');
+                $table->string('media_id');
                 $table->unsignedInteger('user_id')->nullable();
                 $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
                 $table->timestamp('updated_at')->nullable();

@@ -7,7 +7,7 @@ use \TwitterAccount;
 /**
  * integer $id
  * string $name
- * string $url
+ * string $media_id
  * integet $user_id
  * timestamp updated_at
  * timestamp created_at
@@ -28,12 +28,12 @@ class Media extends Model
             TwitterAccount::getCredentialsTwitter()['oauth_token'],
             TwitterAccount::getCredentialsTwitter()['oauth_token_secret']);
         $media1 = $connection->upload('media/upload', array('media' => $base64));
-        $parameters = array(
-            'status' => '',
-            'media_ids' => implode(',', array($media1->media_id_string)),
-        );
-        $result = $connection->post('statuses/update', $parameters);
-        return $result;
+        // $parameters = array(
+        //     'status' => '',
+        //     'media_ids' => implode(',', array($media1->media_id_string)),
+        // );
+        // $result = $connection->post('statuses/update', $parameters);
+        return $media1->media_id_string;
     }
 
     public function isUserHas()

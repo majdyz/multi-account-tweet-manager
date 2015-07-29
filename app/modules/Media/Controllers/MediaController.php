@@ -32,10 +32,9 @@ class MediaController extends BaseController
     public function upload()
     {
         $base64 = str_replace(' ', '+', $_POST['base64']);
-        $url = Media::upload($base64);
         $media = new Media;
         $media->name = $_POST['name'];
-        $media->url = $url->text;
+        $media->media_id = Media::upload($base64);
         $media->user_id = \Sentry::getUser()->id;
         $media->save();
         Response::redirect($this->siteUrl('admin/media/' . $media->id));
