@@ -31,20 +31,15 @@ class MediaController extends BaseController
 
     public function upload()
     {
-        $base64 = str_replace(' ', '+', $_POST['base64']);
-        $file = Media::upload($base64);
-        $media = new Media;
-        $media->name = $_POST['name'];
-        $media->media_id = $file->media_id;
-        $media->media_id_string = $file->media_id_string;
-        $media->size = $file->size;
-        $media->w = $file->image->w;
-        $media->h = $file->image->h;
-        $media->expires_after_secs = $file->expires_after_secs;
-        $media->image_type = $file->image->image_type;
-        $media->user_id = \Sentry::getUser()->id;
-        $media->save();
-        Response::redirect($this->siteUrl('admin/media/' . $media->id));
+        $uploadfile = 'uploads/' . basename($_FILES['userfile']['name']);
+        if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile)) {
+            $media = new Media;
+            $media->name = $_POST['name'];
+            $media->url = $this->siteUrl($uploadfile);
+            $media->user_id = \Sentry::getUser()->id;
+            $media->save();
+            Response::redirect($this->siteUrl('admin/media/' . $media->id));
+        };
     }
 
     public function show($id)
@@ -58,7 +53,6 @@ class MediaController extends BaseController
 
     public function create()
     {
-        $this->loadJs('app/upload.js');
         $this->data['title'] = 'Upload Media';
         View::display('@media/media/create.twig', $this->data);
     }

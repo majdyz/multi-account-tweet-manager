@@ -10,7 +10,7 @@
         <h3>{{ title }}</h3>
     </div>
     <div class="col-xs-2">
-        <a onclick="if (confirm('Are you sure want to delete this user?') == false) return false" href="../destroy/{{ model.id }}" class="btn btn-danger btn-sm pull-right"><i class="fa fa-trash-o"></i> Delete media</a>
+        <a onclick="if (confirm('Are you sure want to delete this user?') == false) return false" href="destroy/{{ model.id }}" class="btn btn-danger btn-sm pull-right"><i class="fa fa-trash-o"></i> Delete media</a>
     </div>
 </div>
 <div class="row">
@@ -24,7 +24,7 @@
                     </tr>
                     <tr>
                         <td>Media Id</td>
-                        <td>{{ model.media_id }}</td>
+                        <td>{{ model.url }}</td>
                     </tr>
                     <tr>
                         <td>Created At</td>

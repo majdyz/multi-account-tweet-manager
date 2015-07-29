@@ -7,13 +7,7 @@ use \TwitterAccount;
 /**
  * integer $id
  * string $name
- * integer $media_id
- * integer $media_id_string
- * integer $size
- * integer $w
- * integer $h
- * integer $expires_after_secs
- * string $image_type
+ * string $url
  * integet $user_id
  * timestamp updated_at
  * timestamp created_at
