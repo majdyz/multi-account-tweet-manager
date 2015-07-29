@@ -152,10 +152,17 @@ class TweetSetController extends BaseController
                     $files[] = $connection->upload('media/upload', array('media' => $url))->media_id_string;
                 }
 
-                $success_now = $connection->post("statuses/update", array(
-                                "status" =>$tweet_text,
-                                'media_ids' => implode(',',$files)
-                        ));
+                if (count($files) > 0) {
+                    $success_now = $connection->post("statuses/update", array(
+                            "status" =>$tweet_text,
+                            'media_ids' => implode(',',$files)
+                    ));
+                }
+                else {
+                    $success_now = $connection->post("statuses/update", array(
+                            "status" =>$tweet_text
+                    ));   
+                }
                 
                 if (!$success_now) {
                     throw new Exception('posting fail');
@@ -227,6 +234,7 @@ class TweetSetController extends BaseController
             }
             
             $tweet = Tweet::getOneTweet($tweetset_id,$tweet['id']);
+            $tweet->getMediaUrl();
 
             $this->data['tweets'][$i]['media'] = $tweet->getMediaList();
         }
