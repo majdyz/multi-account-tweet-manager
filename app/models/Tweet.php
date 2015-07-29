@@ -28,37 +28,30 @@ class Tweet extends Model
     }
 
     /**
-    *   get all media text
+    *   get all array of media_id
     */
-    public function getMediaText() {
-        $first = true;
+    public function getMediaIds() {
         $medias = $this->medias;
-        $ret = "";
+        $ret = [];
         foreach($medias as $media) {
-            if (!$first) {
-                $ret = $ret . "\n" . $media->url;
-            }
-            else {
-                $ret = $media->url;
-                $first = false;
-            }
+            $ret[] = $media->media_id_string;
         }
         return $ret;
     }
 
     /**
-    *   get all media url
+    *   get all media list
     */
-    public function getMediaUrl() {
+    public function getMediaList() {
         $first = true;
         $medias = $this->medias;
         $ret = "";
         foreach($medias as $media) {
             if (!$first) {
-                $ret = $ret . "\n" .$media->name . '(' . $media->url .')';
+                $ret = $ret . "," . $media->name;
             }
             else {
-                $ret = $media->name . '(' . $media->url . ')';
+                $ret = $media->name ;
                 $first = false;
             }
         }

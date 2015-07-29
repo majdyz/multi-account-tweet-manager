@@ -52,6 +52,11 @@ $(function(){
                     $('#tweet_'+a).val($tweet[a]);
                 }
 
+                for (var a in $tweet['medias']) {
+                    console.log($('#tweet_media_'+$tweet['medias'][a]['id']));
+                    $('#tweet_media_'+$tweet['medias'][a]['id']).attr('checked',true);
+                }
+
                 $('#btn-tweet-save').attr('data-method', 'PUT');
                 $('#tweet-modal').modal('show');
             }else{
@@ -112,6 +117,13 @@ $(function(){
         $button.html('saving...');
         $loader.show();
 
+        $selected = [];
+        $('#tweet_medias input:checked').each(function() {
+            $selected.push($(this).attr('value'));
+        });
+
+        $tweetdata.push({'name' : 'medias' , 'value' : JSON.stringify($selected)});
+
         $.ajax({
             url: $url,
             data: $tweetdata,
@@ -143,6 +155,7 @@ $(function(){
                             '</tr>'
                         );
                     }else{
+
                         var $fields = $('#tweet-row-'+resp.data.id+' td');
                         if (tweet.tweetset_id != global.tweetset_id) {
                             $fields.hide();

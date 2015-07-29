@@ -38,10 +38,10 @@ class MediaController extends BaseController
         $media->media_id = $file->media_id;
         $media->media_id_string = $file->media_id_string;
         $media->size = $file->size;
-        $media->w = $file->w;
-        $media->h = $file->h;
+        // $media->w = $file->w;
+        // $media->h = $file->h;
         $media->expires_after_secs = $file->expires_after_secs;
-        $media->image_type = $file->image_type;
+        // $media->image_type = $file->image_type;
         $media->user_id = \Sentry::getUser()->id;
         $media->save();
         Response::redirect($this->siteUrl('admin/media/' . $media->id));

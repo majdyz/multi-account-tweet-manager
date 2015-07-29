@@ -115,9 +115,8 @@ class TweetSetController extends BaseController
             foreach ($input as $data) {
                 $account = $data['account'];
                 $tweet   = Tweet::getOneTweet($tweetset_id,$data['tweet']['id']);
-                $media   = $tweet->getMediaText();
+                $medias  = $tweet->getMediaIds();
                 $tweet   = $tweet->toArray();
-                $tweet['media'] = $media;
                 $message = $tweet['text'];
 
                 /** check wether the user own the account */
@@ -144,12 +143,11 @@ class TweetSetController extends BaseController
                     $tweet_text = $tweet_text . "\n" . $tweet['hashtags'];
                 }  
 
-                if (strlen($tweet['media']) > 0) {
-                    $tweet_text = $tweet_text . "\n" . $tweet['media'];
-                }  
+                throw new Exception(implode(',',$medias));
 
                 $success_now = $connection->post("statuses/update", array(
                                 "status" =>$tweet_text,
+                                // 'media_ids' => implode(',',$medias)
                             ));
 
                 if (!$success_now) {
@@ -222,18 +220,8 @@ class TweetSetController extends BaseController
             }
             
             $tweet = Tweet::getOneTweet($tweetset_id,$tweet['id']);
-            $medias = $tweet->medias;
 
-            $first = true;
-            foreach($medias as $media) {
-                if (!$first) {
-                    $this->data['tweets'][$i]['media'] = $this->data['tweets'][$i]['media'] . "\n" . $media->url;
-                }
-                else {
-                    $this->data['tweets'][$i]['media'] = $media->url;
-                    $first = false;
-                }
-            }
+            $this->data['tweets'][$i]['media'] = $tweet->getMediaList();
         }
 
         /** load the tweet.js app */
