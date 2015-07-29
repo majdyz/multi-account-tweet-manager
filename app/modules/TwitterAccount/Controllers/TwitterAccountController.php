@@ -25,6 +25,7 @@ class TwitterAccountController extends BaseController
     {
         $this->data['title'] = 'Twitter Account';
         $this->data['users'] = \User::find(Sentry::getUser()->id)->twitterAccounts()->where('status', '>', 0)->get();
+        $this->data['owner'] = Sentry::getUser();
         View::display('@twitteraccount/twitter-account/index.twig', $this->data);
     }
 

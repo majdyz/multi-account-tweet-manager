@@ -19,7 +19,7 @@ class Media extends Model
     public function tweets() {
         return $this->belongsToMany('Tweet', 'tweet_media', 'media_id', 'tweet_id');
     }
-    
+
     public static function upload($base64)
     {
         $connection = new TwitterOAuth(
