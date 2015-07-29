@@ -143,12 +143,10 @@ class TweetSetController extends BaseController
                     $tweet_text = $tweet_text . "\n" . $tweet['hashtags'];
                 }  
 
-                throw new Exception(implode(',',$medias));
-
                 $success_now = $connection->post("statuses/update", array(
                                 "status" =>$tweet_text,
-                                // 'media_ids' => implode(',',$medias)
-                            ));
+                                'media_ids' => implode(',',$medias)
+                        ));
 
                 if (!$success_now) {
                     throw new Exception('posting fail');
