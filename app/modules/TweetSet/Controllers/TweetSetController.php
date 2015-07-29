@@ -58,6 +58,7 @@ class TweetSetController extends BaseController
 
         $accounts = User::getActiveAccounts()->toArray();
         $tweets   = Tweet::getAllTweets($tweetset_id)->toArray();
+        $tweetset = TweetSet::getOneTweetSet($tweetset_id);
 
         $tweets_count = count($tweets);
         $accounts_count = count($accounts);
@@ -72,7 +73,9 @@ class TweetSetController extends BaseController
             $this->data['error'] = "Sorry, You don't have any twitter account";
         }
         else {
-            foreach ($accounts as $account) {
+            $count = 0;
+            foreach ($accounts as $account) if ($count < $tweetset->user_involved) {
+                $count++;
                 // uniform mersenne twister random
                 $result  = ['account' => $account, 'tweet' => $tweets[mt_rand(0,$tweets_count-1)]]; 
                 $results[] = $result;
@@ -133,6 +136,7 @@ class TweetSetController extends BaseController
                                 $account['oauth_token_secret']
                             );
 
+                
                 $tweet_text = $tweet['text'];
 
                 if (strlen($tweet['mentions']) > 0) {

@@ -22,7 +22,7 @@ class Initialize extends \SlimStarter\Module\Initializer{
 
         $userMenu = $adminMenu->createItem('media', array(
             'label' => 'Media',
-            'icon'  => 'twitter',
+            'icon'  => 'camera',
             'url'   => 'admin/media'
         ));
 

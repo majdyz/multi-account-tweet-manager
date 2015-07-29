@@ -231,6 +231,7 @@ class Migrator{
             {
                 $table->increments('id');
                 $table->string('name');
+                $table->integer('user_involved');
                 $table->timestamp('updated_at')->nullable();
                 $table->timestamp('created_at')->nullable();
                 $table->unsignedInteger('user_id')->nullable();;

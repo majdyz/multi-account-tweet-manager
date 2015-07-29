@@ -8,6 +8,7 @@ use \Sentry;
  * integer $id
  * string $name
  * integer $user_id
+ * integer user_involved
  * timestamp updated_at
  * timestamp created_at
  */
@@ -42,15 +43,17 @@ class TweetSet extends Model
     public static function updateTweetSet($id,$input) {
     	$tweetset = TweetSet::getOneTweetSet($id);
     	$tweetset->name = $input['name'];
-    	return $tweetset;
+        $tweetset->user_involved = $input['user_involved'];
+        return $tweetset;
     }
 
     /**
     * create tweetset
     */
     public static function createTweetSet($input) {
-    	$tweetset = new TweetSet();
-    	$tweetset->name = $input['name'];
+        $tweetset = new TweetSet();
+        $tweetset->name = $input['name'];
+        $tweetset->user_involved = $input['user_involved'];
     	$tweetset->user_id = Sentry::getUser()->id;
     	return $tweetset;
     }
