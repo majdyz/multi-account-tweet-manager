@@ -30,11 +30,11 @@ class Tweet extends Model
     /**
     *   get all array of media_id
     */
-    public function getMediaIds() {
+    public function getMediaUrl() {
         $medias = $this->medias;
         $ret = [];
         foreach($medias as $media) {
-            $ret[] = $media->media_id_string;
+            $ret[] = $media->url;
         }
         return $ret;
     }

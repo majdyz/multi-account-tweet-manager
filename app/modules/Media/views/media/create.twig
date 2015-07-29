@@ -11,31 +11,10 @@
     </div>
 </div>
 
-<form action="upload" method="post">
-    <input type='text' id="base64" name="base64" hidden>
-
-    <div class="form-group">
-        <label for="textArea" class="col-lg-2 control-label">Name</label>
-        <div class="col-lg-10">
-            <input type='name' name="name" class="form-control">
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label for="textArea" class="col-lg-2 control-label">File Upload</label>
-        <div class="col-lg-10">
-            <input type='file' id="inputfile" />
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-lg-10 col-lg-offset-2">
-            <button class="btn btn-primary btn-xs">submit</button>
-        </div>
-    </div>
-    
-    <br /><br />
-    <div class="text-center container"><img id="img" src="//placehold.it/1x1/" class="img-responsive"></div>
+<form enctype="multipart/form-data" action="upload" method="POST">
+    <input type='name' name="name" class="form-control">
+    Send this file: <input name="userfile" type="file" />
+    <input type="submit" value="Send File" />
 </form>
 
 {% endblock %}

@@ -115,7 +115,7 @@ class TweetSetController extends BaseController
             foreach ($input as $data) {
                 $account = $data['account'];
                 $tweet   = Tweet::getOneTweet($tweetset_id,$data['tweet']['id']);
-                $medias  = $tweet->getMediaIds();
+                $medias  = $tweet->getMediaUrl();
                 $tweet   = $tweet->toArray();
                 $message = $tweet['text'];
 
@@ -143,13 +143,16 @@ class TweetSetController extends BaseController
                     $tweet_text = $tweet_text . "\n" . $tweet['hashtags'];
                 }  
 
-                // throw new Exception(implode(',',$medias));
-                
+                $files = [];
+                foreach ($medias as $url) {
+                    $files[] = $connection->upload('media/upload', array('media' => $url))->media_id_string;
+                }
+
                 $success_now = $connection->post("statuses/update", array(
                                 "status" =>$tweet_text,
-                                'media_ids' => implode(',',$medias)
+                                'media_ids' => implode(',',$files)
                         ));
-
+                
                 if (!$success_now) {
                     throw new Exception('posting fail');
                 }

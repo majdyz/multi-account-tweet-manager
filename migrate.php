@@ -273,13 +273,7 @@ class Migrator{
             {
                 $table->increments('id');
                 $table->string('name');
-                $table->string('media_id');
-                $table->string('media_id_string');
-                $table->integer('size');
-                $table->integer('w');
-                $table->integer('h');
-                $table->integer('expires_after_secs');
-                $table->string('image_type');
+                $table->string('url');
                 $table->unsignedInteger('user_id')->nullable();
                 $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
                 $table->timestamp('updated_at')->nullable();

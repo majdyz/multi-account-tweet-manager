@@ -7,13 +7,7 @@ use \TwitterAccount;
 /**
  * integer $id
  * string $name
- * string $media_id
- * string $media_id_string
- * integer $size
- * integer $w
- * integer $h
- * integer $expires_after_secs
- * string $image_type
+ * string $url
  * integet $user_id
  * timestamp updated_at
  * timestamp created_at
@@ -25,7 +19,7 @@ class Media extends Model
     public function tweets() {
         return $this->belongsToMany('Tweet', 'tweet_media', 'media_id', 'tweet_id');
     }
-
+    
     public static function upload($base64)
     {
         $connection = new TwitterOAuth(
