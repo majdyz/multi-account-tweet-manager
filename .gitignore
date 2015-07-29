@@ -1,3 +1,7 @@
 vendor
 dev
 composer.phar
+
+public/uploads/**
+
+!.keep

@@ -38,7 +38,7 @@ class TweetSetController extends BaseController
      * display list of resource
      */
     public function index($page = 1) {
-        $this->data['title'] = 'Tweetset List';
+        $this->data['title'] = 'Tweetset';
         $this->data['tweetsets'] = TweetSet::getAllTweetSets()->toArray();
         
         /** load the tweetset.js app */
