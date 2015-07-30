@@ -92,6 +92,11 @@ class TwitterAccountController extends BaseController
         $this->data['title'] = 'Twitter Connect';
         $this->data['user'] = \User::find($id);
         $this->data['owner'] = Sentry::getUser();
+
+        if(is_null($this->data['user'])){
+            \App::notFound();
+        }
+
         View::display('@twitteraccount/twitter-account/insert.twig', $this->data);
     }
 
