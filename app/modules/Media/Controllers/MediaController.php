@@ -15,6 +15,7 @@ use \Response;
 
 class MediaController extends BaseController
 {
+    const UPLOAD_PATH = 'uploads/';
 
     public function __construct()
     {
@@ -31,7 +32,7 @@ class MediaController extends BaseController
 
     public function upload()
     {
-        $uploadfile = 'uploads/' . basename($_FILES['userfile']['name']);
+        $uploadfile = self::UPLOAD_PATH . basename($_FILES['userfile']['name']);
         if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile)) {
             $media = new Media;
             $media->name = $_POST['name'];
@@ -44,9 +45,12 @@ class MediaController extends BaseController
 
     public function show($id)
     {
-        $this->findMedia($id)->isUserHas();
+        $model = $this->findMedia($id);
+        if (is_null($model) || $model->user_id !== \Sentry::getUser()->id) {
+            \App::notFound();
+        }
 
-        $this->data['model'] = $this->findMedia($id);
+        $this->data['model'] = $model;
         $this->data['title'] = 'View ' . $this->data['model']->name;
         View::display('@media/media/view.twig', $this->data);
     }
@@ -59,9 +63,17 @@ class MediaController extends BaseController
 
     public function destroy($id)
     {
-        $this->findMedia($id)->isUserHas();
+        $model = $this->findMedia($id);
+        if (is_null($model) || $model->user_id !== \Sentry::getUser()->id) {
+            \App::notFound();
+        }
 
-        $this->findMedia($id)->delete();
+        $filepath = self::UPLOAD_PATH . basename($model->url);
+
+        if(unlink($filepath)){
+            $model->delete();
+        }
+
         Response::redirect($this->siteUrl('admin/media'));
     }
 
