@@ -128,6 +128,7 @@ $(function(){
                             '<tr id="tweetset-row-'+resp.data.id+'">'+
                                 '<td>'+tweetset.id+'</td>'+
                                 '<td>'+tweetset.name+'</td>'+
+                                '<td>'+tweetset.user_involved+'</td>'+
                                 '<td>'+tweetset.updated_at+'</td>'+
                                 '<td>'+tweetset.created_at+'</td>'+
                                 '<td class="text-center">'+
@@ -141,8 +142,9 @@ $(function(){
                     }else{
                         var $fields = $('#tweetset-row-'+resp.data.id+' td');
                         $($fields[1]).html(tweetset.name);
-                        $($fields[2]).html(tweetset.updated_at);
-                        $($fields[3]).html(tweetset.created_at);
+                        $($fields[2]).html(tweetset.user_involved);
+                        $($fields[3]).html(tweetset.updated_at);
+                        $($fields[4]).html(tweetset.created_at);
                     }
 
                     /** reset the form and hide modal form */

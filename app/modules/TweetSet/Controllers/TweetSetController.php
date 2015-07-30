@@ -58,6 +58,7 @@ class TweetSetController extends BaseController
 
         $accounts = User::getActiveAccounts()->toArray();
         $tweets   = Tweet::getAllTweets($tweetset_id)->toArray();
+        $tweetset = TweetSet::getOneTweetSet($tweetset_id);
 
         $tweets_count = count($tweets);
         $accounts_count = count($accounts);
@@ -72,7 +73,9 @@ class TweetSetController extends BaseController
             $this->data['error'] = "Sorry, You don't have any twitter account";
         }
         else {
-            foreach ($accounts as $account) {
+            $count = 0;
+            foreach ($accounts as $account) if ($count < $tweetset->user_involved) {
+                $count++;
                 // uniform mersenne twister random
                 $result  = ['account' => $account, 'tweet' => $tweets[mt_rand(0,$tweets_count-1)]]; 
                 $results[] = $result;
@@ -133,6 +136,7 @@ class TweetSetController extends BaseController
                                 $account['oauth_token_secret']
                             );
 
+                
                 $tweet_text = $tweet['text'];
 
                 if (strlen($tweet['mentions']) > 0) {
@@ -148,10 +152,17 @@ class TweetSetController extends BaseController
                     $files[] = $connection->upload('media/upload', array('media' => $url))->media_id_string;
                 }
 
-                $success_now = $connection->post("statuses/update", array(
-                                "status" =>$tweet_text,
-                                'media_ids' => implode(',',$files)
-                        ));
+                if (count($files) > 0) {
+                    $success_now = $connection->post("statuses/update", array(
+                            "status" =>$tweet_text,
+                            'media_ids' => implode(',',$files)
+                    ));
+                }
+                else {
+                    $success_now = $connection->post("statuses/update", array(
+                            "status" =>$tweet_text
+                    ));   
+                }
                 
                 if (!$success_now) {
                     throw new Exception('posting fail');
@@ -223,6 +234,7 @@ class TweetSetController extends BaseController
             }
             
             $tweet = Tweet::getOneTweet($tweetset_id,$tweet['id']);
+            $tweet->getMediaUrl();
 
             $this->data['tweets'][$i]['media'] = $tweet->getMediaList();
         }
