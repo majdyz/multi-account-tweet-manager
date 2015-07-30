@@ -19,12 +19,4 @@ class Media extends Model
     public function tweets() {
         return $this->belongsToMany('Tweet', 'tweet_media', 'media_id', 'tweet_id');
     }
-
-    public function isUserHas()
-    {
-        if ($this->user_id == \Sentry::getUser()->id) {
-            return true;
-        }
-        \App::notFound();
-    }
 }

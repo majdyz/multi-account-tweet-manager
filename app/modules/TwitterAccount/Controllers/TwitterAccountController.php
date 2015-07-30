@@ -31,44 +31,59 @@ class TwitterAccountController extends BaseController
 
     public function show($id)
     {
-        $this->findUser($id)->isUserHas();
+        $model = $this->findUser($id);
+        if (is_null($model) || is_null($model->users()->where('id', \Sentry::getUser()->id)->first())) {
+            \App::notFound();
+        }
 
-        $this->data['title'] = $this->findUser($id)->username;
-        $this->data['user'] = $this->findUser($id);
+        $this->data['title'] = $model->username;
+        $this->data['user'] = $model;
         View::display('@twitteraccount/twitter-account/view.twig', $this->data);
     }
 
     // hard delete
     public function destroy($id)
     {
-        $this->findUser($id)->isUserHas();
+        $model = $this->findUser($id);
+        if (is_null($model) || is_null($model->users()->where('id', \Sentry::getUser()->id)->first())) {
+            \App::notFound();
+        }
 
-        $this->findUser($id)->delete();
+        $model->deleteAccount();
         Response::redirect($this->siteUrl('admin/twitter-account'));
     }
 
     public function disable($id)
     {
-        $this->findUser($id)->isUserHas();
+        $model = $this->findUser($id);
+        if (is_null($model) || is_null($model->users()->where('id', \Sentry::getUser()->id)->first())) {
+            \App::notFound();
+        }
 
-        $this->findUser($id)->disableAccount();
+        $model->disableAccount();
         Response::redirect($this->siteUrl('admin/twitter-account'));
     }
 
     public function enable($id)
     {
-        $this->findUser($id)->isUserHas();
+        $model = $this->findUser($id);
+        if (is_null($model) || is_null($model->users()->where('id', \Sentry::getUser()->id)->first())) {
+            \App::notFound();
+        }
 
-        $this->findUser($id)->enableAccount();
+        $model->enableAccount();
         Response::redirect($this->siteUrl('admin/twitter-account'));
     }
 
     // soft delete
     public function delete($id)
     {
-        $this->findUser($id)->isUserHas();
+        $model = $this->findUser($id);
+        if (is_null($model) || is_null($model->users()->where('id', \Sentry::getUser()->id)->first())) {
+            \App::notFound();
+        }
         
-        $this->findUser($id)->deleteAccount();
+        $model->deleteAccount();
         Response::redirect($this->siteUrl('admin/twitter-account'));
     }
 
