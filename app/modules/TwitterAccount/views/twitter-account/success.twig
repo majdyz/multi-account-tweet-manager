@@ -26,9 +26,14 @@
                 </div>
             </div>
         </div>
-        <div class="text-center">
-            <a href="{{ siteUrl('logout') }}" class="btn btn-success btn-sm">Logout</a>
+        <br /><br />   
+        {% if owner != null %}
+        <div class="row text-center">
+            <div class="col-lg-12 text-center">
+                <a href="{{ siteUrl('/') }}">Back to Dashboard</a>
+            </div>
         </div>
+        {% endif %}
         <!-- /.col-lg-12 -->
     </div>
     <!-- /.row -->

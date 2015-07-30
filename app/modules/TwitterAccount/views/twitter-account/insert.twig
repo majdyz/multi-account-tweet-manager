@@ -5,10 +5,24 @@
     <div class="row">
         <div class="col-lg-12 text-center">
             <h3 class="page-header">{{ title }}</h3>
-            <a href="{{ siteUrl('connect/start/') }}{{ user.id }}">
-                <img src="https://g.twimg.com/dev/sites/default/files/images_documentation/sign-in-with-twitter-gray.png">
-            </a>
+            Join to CompFest7 Tweet Manager for user {{ user.username }}.
+            <br /><br />
         </div>
+        <div class="row text-center">
+            <div class="col-lg-12 text-center">
+                <a href="{{ siteUrl('connect/start/') }}{{ user.id }}">
+                    <img src="https://g.twimg.com/dev/sites/default/files/images_documentation/sign-in-with-twitter-gray.png">
+                </a>
+            </div>       
+        </div>
+        <br /><br />   
+        {% if owner != null %}
+        <div class="row text-center">
+            <div class="col-lg-12 text-center">
+                <a href="{{ siteUrl('/') }}">Back to Dashboard</a>
+            </div>
+        </div>
+        {% endif %}
         <!-- /.col-lg-12 -->
     </div>
     <!-- /.row -->

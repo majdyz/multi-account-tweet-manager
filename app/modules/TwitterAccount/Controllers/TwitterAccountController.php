@@ -91,32 +91,36 @@ class TwitterAccountController extends BaseController
     {
         $this->data['title'] = 'Twitter Connect';
         $this->data['user'] = \User::find($id);
+        $this->data['owner'] = Sentry::getUser();
         View::display('@twitteraccount/twitter-account/insert.twig', $this->data);
     }
 
     public function connect($id)
     {
-        $connection     = new TwitterOAuth(TwitterAccount::getCredentialsTwitter()['consumer_key'], TwitterAccount::getCredentialsTwitter()['consumer_secret']);
-        $request_token  = $connection->oauth("oauth/request_token", array("oauth_callback" => $this->siteUrl('connect/success/' . $id )));
-        $oauth_token    = $request_token['oauth_token'];
-        $token_secret   = $request_token['oauth_token_secret'];
-        $url            = $connection->url("oauth/authorize", ['oauth_token' => $oauth_token]);
-        $account = new TwitterAccount;
-        $account->oauth_token = $oauth_token;
-        $account->oauth_token_secret = $token_secret;
-        $account->save();
+        $connection         = new TwitterOAuth(TwitterAccount::getCredentialsTwitter()['consumer_key'], TwitterAccount::getCredentialsTwitter()['consumer_secret']);
+        $request_token      = $connection->oauth("oauth/request_token", array("oauth_callback" => $this->siteUrl('connect/success/' . $id )));
+        $oauth_token        = $request_token['oauth_token'];
+        $oauth_token_secret = $request_token['oauth_token_secret'];
+        $url                = $connection->url("oauth/authorize", ['oauth_token' => $oauth_token]);
+
+        $_SESSION['twitter_connect'] = [
+            'oauth_token' => $oauth_token,
+            'oauth_token_secret' => $oauth_token_secret
+        ];
 
         Response::redirect($url);
     }
 
     public function success($id)
     {
-        $account = TwitterAccount::where('oauth_token', '=', $_GET['oauth_token'])->first();
-        if ($account != null) {
-            
-            $connection = new TwitterOAuth(TwitterAccount::getCredentialsTwitter()['consumer_key'], TwitterAccount::getCredentialsTwitter()['consumer_secret'], $account->oauth_token, $account->oauth_token_secret);
-            $access_token = $connection->oauth("oauth/access_token", ["oauth_verifier" => $_GET['oauth_verifier']]);
-            
+        $connection = new TwitterOAuth(TwitterAccount::getCredentialsTwitter()['consumer_key'], TwitterAccount::getCredentialsTwitter()['consumer_secret'], $_GET['oauth_token'], $_SESSION['twitter_connect']['oauth_token_secret']);
+        $access_token = $connection->oauth("oauth/access_token", ["oauth_verifier" => $_GET['oauth_verifier']]);
+        
+        unset($_SESSION['twitter_connect']);
+
+        if(is_null(TwitterAccount::where('id', '=', $access_token['user_id'])->first())){
+            $account = new TwitterAccount;
+            $account->id = $access_token['user_id'];
             $account->username = $access_token['screen_name'];
             $account->joined_at = time();
             $account->oauth_token = $access_token['oauth_token'];
@@ -126,9 +130,9 @@ class TwitterAccountController extends BaseController
             $account->users()->save(\User::find($id));
         }
 
-
         $this->data['title'] = 'Successfully';
-        $this->data['account'] = TwitterAccount::find($account->id);
+        $this->data['account'] = TwitterAccount::find($access_token['user_id']);
+        $this->data['owner'] = Sentry::getUser();
         if ($this->data['account'] == null) {
             App::notFound();
         }
