@@ -231,6 +231,9 @@ class BaseController
         $this->loadCss("bootstrap.min.css");
         $this->loadCss("font-awesome.min.css");
         $this->loadCss("sb-admin.css");
+        $this->loadCss("roboto.min.css");
+        $this->loadCss("material.min.css");
+        $this->loadCss("ripples.min.css");
         $this->loadCss("custom.css");
     }
 
@@ -243,6 +246,8 @@ class BaseController
         $this->loadJs("bootstrap.min.js");
         $this->loadJs("plugins/metisMenu/jquery.metisMenu.js");
         $this->loadJs("sb-admin.js");
+        $this->loadJs("material.min.js");
+        $this->loadJs("ripples.min.js");
     }
 
     /**
