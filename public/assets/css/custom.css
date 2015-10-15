@@ -47,7 +47,7 @@ img.navbar-logo{
 .pointer {
     position: absolute;
     right: 20px;
-    top: 10px;
+    top: 15px;
 }
 .pointer .arrow,
 .pointer .arrow_border {
@@ -125,4 +125,30 @@ img.navbar-logo{
         min-height: 0;
         border-left: 1px solid #e7e7e7;
     }
+}
+
+
+/*================= sidebar menu =============*/
+.sidebar-menu ul{
+  margin: 0px;
+  padding: 0px;
+}
+.sidebar-menu li  {
+  text-transform: none;
+  display: block;
+  padding : 0px 0px;
+  margin: 0px 0px;
+  text-align: left;
+}
+.sidebar-menu li a {
+  padding: 15px 15px;
+  margin: 0px;
+  display: block;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.sidebar-menu li a i {
+  margin-right: 15px;
+  font-size: 20px;
 }

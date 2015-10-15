@@ -1,17 +1,33 @@
 <nav class="navbar-default navbar-static-side" role="navigation">
     <div class="sidebar-collapse">
-        {{
-            render_menu('admin_sidebar', 'ul',
-                {
-                    "attributes":{"class": "nav", "id":"side-menu"},
-                    "active" : {
-                        "class": "menu_active",
-                        "prepend" : "<div class='pointer'><div class='arrow'></div><div class='arrow_border'></div></div>"
-                    }
-                }
-            )
-            | raw
-        }}
+            <div class="sidebar-menu">
+                <ul>
+                    <li class ="btn {{title=="Dashboard" ? "menu_active" : ""}}">
+                        <a href="{{baseUrl}}"><i class="fa fa-dashboard"></i>Dashboard</a>
+                        <div class="pointer"><div class="arrow"></div><div class="arrow_border"></div></div>
+                    </li>
+
+                    <li class ="btn {{title=="Media" ? "menu_active" : ""}}">
+                        <a href="{{baseUrl}}admin/media"><i class="fa fa-camera"></i>Media</a>
+                        <div class="pointer"><div class="arrow"></div><div class="arrow_border"></div></div>
+                    </li>
+
+                    <li class ="btn {{title=="Tweetset" ? "menu_active" : ""}}">
+                        <a href="{{baseUrl}}admin/tweetset"><i class="fa fa-comment"></i>TweetSet</a>
+                        <div class="pointer"><div class="arrow"></div><div class="arrow_border"></div></div>
+                    </li>
+
+                    <li class ="btn {{title=="Twitter Account" ? "menu_active" : ""}}"><a href="{{baseUrl}}admin/twitter-account">
+                        <i class="fa fa-twitter"></i>Twitter Account</a>
+                        <div class="pointer"><div class="arrow"></div><div class="arrow_border"></div></div>
+                    </li>
+
+                    <li class ="btn {{title=="User" ? "menu_active" : ""}}">
+                        <a href="{{baseUrl}}admin/user"><i class="fa fa-user"></i>User</a>
+                        <div class="pointer"><div class="arrow"></div><div class="arrow_border"></div></div>
+                    </li>
+                </ul>
+            </div>
         <!-- /#side-menu -->
     </div>
     <!-- /.sidebar-collapse -->
