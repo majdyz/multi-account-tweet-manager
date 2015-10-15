@@ -19,11 +19,6 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 
 class TweetSetController extends BaseController
 {
-    public function __construct() {
-        parent::__construct();
-        Menu::get('admin_sidebar')->setActiveMenu('tweetset');
-    }
-
     /** 
     * sanitize input 
     */

@@ -16,12 +16,6 @@ use \Admin\BaseController;
 
 class TweetController extends BaseController
 {
-    
-    public function __construct() {
-        parent::__construct();
-        Menu::get('admin_sidebar')->setActiveMenu('tweet');
-    }
-
     /** 
     * sanitize input 
     */

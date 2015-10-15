@@ -14,13 +14,6 @@ use \UserTwitterAccount;
 
 class TwitterAccountController extends BaseController
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Menu::get('admin_sidebar')->setActiveMenu('twitteraccount');
-    }
-
     public function index()
     {
         $this->data['title'] = 'Twitter Account';

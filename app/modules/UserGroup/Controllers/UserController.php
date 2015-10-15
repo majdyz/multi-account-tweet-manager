@@ -16,20 +16,13 @@ use \Cartalyst\Sentry\Users\UserNotFoundException;
 
 class UserController extends BaseController
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Menu::get('admin_sidebar')->setActiveMenu('user');
-    }
-
     /**
      * display list of resource
      */
     public function index($page = 1)
     {
         $user = Sentry::getUser();
-        $this->data['title'] = 'Users List';
+        $this->data['title'] = 'User';
         $this->data['users'] = User::where('id', '<>', $user->id)
                                ->get()
                                ->toArray();

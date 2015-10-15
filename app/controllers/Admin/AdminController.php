@@ -38,13 +38,13 @@ class AdminController extends BaseController
     public function doLogin()
     {
         $remember = Input::post('remember', false);
-        $username    = Input::post('username');
+        $username = Input::post('username');
         $redirect = Input::post('redirect');
         $redirect = ($redirect) ? $redirect : 'admin';
 
         try{
             $credential = array(
-                'username'     => $username,
+                'username'  => $username,
                 'password'  => Input::post('password')
             );
 
@@ -74,7 +74,6 @@ class AdminController extends BaseController
     public function logout()
     {
         Sentry::logout();
-
         Response::redirect($this->siteUrl('login'));
     }
 

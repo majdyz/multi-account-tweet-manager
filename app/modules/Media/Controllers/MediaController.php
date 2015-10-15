@@ -17,12 +17,6 @@ class MediaController extends BaseController
 {
     const UPLOAD_PATH = 'uploads/';
 
-    public function __construct()
-    {
-        parent::__construct();
-        Menu::get('admin_sidebar')->setActiveMenu('media');
-    }
-
     public function index()
     {
         $this->data['title'] = 'Media';

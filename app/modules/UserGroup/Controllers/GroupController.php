@@ -10,12 +10,6 @@ use \Admin\BaseController;
 class GroupController extends BaseController
 {
 
-    public function __construct()
-    {
-        parent::__construct();
-        Menu::get('admin_sidebar')->setActiveMenu('group');
-    }
-
     public function index()
     {
         $this->data['title'] = 'Group List';
