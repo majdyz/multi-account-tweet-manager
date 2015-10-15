@@ -30,14 +30,14 @@ class Initialize extends \SlimStarter\Module\Initializer{
         // $userGroup->setAttribute('class', 'nav nav-second-level');
 
         /* only displayed for admin */       
-        // if (Sentry::check() && Sentry::getUser()->id === 1) {
-        //     $userMenu = $adminMenu->createItem('user', array(
-        //         'label' => 'User',
-        //         'icon'  => 'user',
-        //         'url'   => 'admin/user'
-        //     ));
-        //     $adminMenu->addItem('userMenu', $userMenu);
-        // }
+        if (Sentry::check() && Sentry::getUser()->id === 1) {
+            $userMenu = $adminMenu->createItem('user', array(
+                'label' => 'User',
+                'icon'  => 'user',
+                'url'   => 'admin/user'
+            ));
+            $adminMenu->addItem('userMenu', $userMenu);
+        }
 
         // $groupMenu = $adminMenu->createItem('group', array(
         //     'label' => 'Group',
@@ -52,11 +52,11 @@ class Initialize extends \SlimStarter\Module\Initializer{
     }
 
     public function registerAdminRoute(){
-        // Route::resource('/user', function(){
-        //     if (Sentry::getUser()->id !== 1) {
-        //         throw new Exception("You're not supposed to be here.", 403);
-        //     }
-        // } ,'UserGroup\Controllers\UserController');
+        Route::resource('/user', function(){
+            if (Sentry::getUser()->id !== 1) {
+                throw new Exception("You're not supposed to be here.", 403);
+            }
+        } ,'UserGroup\Controllers\UserController');
         // Route::resource('/group', 'UserGroup\Controllers\GroupController');
     }
 }
