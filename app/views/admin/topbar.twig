@@ -1,4 +1,4 @@
-<nav class="navbar navbar-inverse navbar-static-top" role="navigation" style="margin-bottom: 0">
+<nav class="navbar navbar-info navbar-static-top shadow-z-1" role="navigation" style="margin-bottom: 0">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
             <span class="sr-only">Toggle navigation</span>
@@ -7,7 +7,7 @@
             <span class="icon-bar"></span>
         </button>
 
-        <img src="{{assetUrl}}images/twitter-logo.png" alt="xsanisty logo" class="navbar-logo">
+        <img src="{{assetUrl}}images/twitter-logo.png" alt="twitter logo" class="navbar-logo">
         <a class="navbar-brand hidden-xs" href="{{siteUrl('/')}}">
             Multi Account Tweet Manager CompFest7
         </a>
@@ -26,11 +26,6 @@
                 <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
             </a>
             <ul class="dropdown-menu dropdown-user">
-                {# <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                </li>
-                <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                </li>
-                <li class="divider"></li> #}
                 <li><a href="{{ urlFor('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                 </li>
             </ul>
