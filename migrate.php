@@ -1,7 +1,5 @@
 <?php
 
-define('APP_PATH'   , __DIR__.'/app/');
-
 $config = array();
 require __DIR__.'/vendor/autoload.php';
 require __DIR__.'/app/config/database.php';
