@@ -1,8 +1,4 @@
 /** navbar customization */
-.navbar{
-    min-height: 30px
-}
-
 .navbar-top-links li a {
     min-height: 30px;
     padding: 10px 15px;
@@ -11,21 +7,16 @@
 .navbar-brand{
     padding: 10px 15px 10px;
     font-size: 15px;
+
 }
 
-.navbar-inverse .navbar-brand{
-    color: #ddd;
-}
-
-.navbar-inverse{
-    background: linear-gradient(to bottom, #2C3742 0%, #28303A 100%);
-    border-bottom: 1px solid #191E23;
-    color:#ddd;
+.navbar a {
+  color : #19435E;
 }
 
 img.navbar-logo{
     height:30px;
-    margin: 5px 10px;
+    margin: 8px 10px;
     float:left;
 }
 
@@ -78,17 +69,6 @@ img.navbar-logo{
 .navbar-static-side a{
     color:#33455A;
 }
-
-/** sidebar active */
-.menu_active > a {
-    color: #ffffff;
-    background: #33455A;
-}
-.nav > li.menu_active > a:focus, .nav > li.menu_active > a:hover {
-    color: #ffffff;
-    background: #33455A;
-}
-
 
 #page-wrapper{
     min-height: 0;
@@ -151,4 +131,10 @@ img.navbar-logo{
 .sidebar-menu li a i {
   margin-right: 15px;
   font-size: 20px;
+}
+
+
+/*================ form  ================*/
+.form-group  label {
+  margin-top: 15px;
 }

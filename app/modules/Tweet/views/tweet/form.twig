@@ -3,14 +3,14 @@
 
     <div class="form-group">
         <div>
-          <label for="name" class="col-lg-4 control-label">Name</label>
+          <label for="name" class="col-lg-12" style="text-align: left">Name</label>
           <div class="col-lg-8">
               <input type="text" class="input-sm form-control validate[required]" name="name" id="tweet_name" placeholder="Name">
           </div>
         </div>
         
         <div id="tweet_tweetset_id_title">
-          <label for="tweetset_id" class="col-lg-4 control-label">TweetSet</label>
+          <label for="name" class="col-lg-12" style="text-align: left">TweetSet</label>
           <div class="col-lg-8">
             <select class="form-control" name="tweetset_id" id="tweet_tweetset_id">
               {% for tweetset in tweetsets %}
@@ -21,8 +21,11 @@
         </div>
 
         <div id="tweet_media_title">
-          <label for="media_id" class="col-lg-4 control-label">Media</label>
+          <label for="name" class="col-lg-12" style="text-align: left">Media</label>
           <div class="col-lg-8" id = "tweet_medias">
+            {% if media is empty %}
+              There is no media available
+            {% endif %}
             {% for media in medias %}
               <input type="checkbox" name="media" id="tweet_media_{{media.id}}" value="{{media.id}}"> {{media.name}}  <br>
             {% endfor %}
@@ -30,21 +33,21 @@
         </div>
 
         <div>
-          <label for="text" class="col-lg-4 control-label">Tweet Text</label>
+          <label for="name" class="col-lg-12" style="text-align: left">Tweet Text</label>
           <div class="col-lg-8">
               <textarea type="text" rows = "4" class="input-sm form-control validate[required]" name="text" id="tweet_text" placeholder="Write your tweet here"></textarea>
           </div>
         </div>
 
         <div>
-          <label for="mentions" class="col-lg-4 control-label">Mentions</label>
+          <label for="name" class="col-lg-12" style="text-align: left">Mentions</label>
           <div class="col-lg-8">
               <input type="text" class="input-sm form-control validate[required]" name="mentions" id="tweet_mentions" placeholder="Mentions">
           </div>
         </div>
 
         <div>
-          <label for="hashtags" class="col-lg-4 control-label">Hashtags</label>
+          <label for="name" class="col-lg-12" style="text-align: left">Hashtags</label>
           <div class="col-lg-8">
               <input type="text" class="input-sm form-control validate[required]" name="hashtags" id="tweet_hashtags" placeholder="Hashtags">
           </div>
