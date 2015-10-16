@@ -31,11 +31,11 @@ class TweetController extends BaseController
      * display list of resource
      */
     public function index($tweetset_id, $page = 1) {
-        $this->data['title'] = TweetSet::getOneTweetSet($tweetset_id)->name."'s Tweets";
-        $this->data['tweets'] = Tweet::getAllTweets($tweetset_id)->toArray();
-        $this->data['tweetsets'] = TweetSet::getAllTweetSets()->toArray();
-        $this->data['medias'] = Media::where('user_id',Sentry::getUser()->id)->get()->toArray();
-        $this->data['tweetset_id'] = $tweetset_id;
+        $this->data['title']        = TweetSet::getOneTweetSet($tweetset_id)->name."'s Tweets";
+        $this->data['tweets']       = Tweet::getAllTweets($tweetset_id)->toArray();
+        $this->data['tweetsets']    = TweetSet::getAllTweetSets()->toArray();
+        $this->data['medias']       = Media::where('user_id',Sentry::getUser()->id)->get()->toArray();
+        $this->data['tweetset_id']  = $tweetset_id;
 
         /*querying name of tweet and medias*/
         foreach ($this->data['tweets'] as $i => $tweet) {
@@ -71,28 +71,24 @@ class TweetController extends BaseController
      * display resource with specific id
      */
     public function show($tweetset_id,$id) {
-        if (Request::isAjax()) {
-            $tweet = null;
-            $message = '';
+        $tweet = null;
+        $message = '';
+        
+        try {
+            $tweet = Tweet::getOneTweet($tweetset_id,$id);
             
-            try {
-                $tweet = Tweet::getOneTweet($tweetset_id,$id);
-                
-                $tweetArray = $tweet->toArray();
+            $tweetArray = $tweet->toArray();
 
-                if ($tweet->medias) {
-                    $tweetArray['medias'] = $tweet->medias->toArray();
-                }
+            if ($tweet->medias) {
+                $tweetArray['medias'] = $tweet->medias->toArray();
             }
-            catch(Exception $e) {
-                $message = $e->getMessage();
-            }
-            
-            Response::headers()->set('Content-Type', 'application/json');
-            Response::setBody(json_encode(array('success' => !is_null($tweet), 'data' => !is_null($tweet) ? $tweetArray : $tweet, 'message' => $message, 'code' => is_null($tweet) ? 404 : 200)));
-        } 
-        else {
         }
+        catch(Exception $e) {
+            $message = $e->getMessage();
+        }
+        
+        Response::headers()->set('Content-Type', 'application/json');
+        Response::setBody(json_encode(array('success' => !is_null($tweet), 'data' => !is_null($tweet) ? $tweetArray : $tweet, 'message' => $message, 'code' => is_null($tweet) ? 404 : 200)));
     }
     
     /**

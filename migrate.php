@@ -255,8 +255,6 @@ class Migrator{
                 $table->unsignedInteger('tweetset_id')->nullable();;
                 $table->foreign('tweetset_id')->references('id')->on('tweetsets')->onDelete('cascade')->onUpdate('cascade');
                 $table->string('text');
-                $table->string('mentions');
-                $table->string('hashtags');
                 $table->timestamp('updated_at')->nullable();
                 $table->timestamp('created_at')->nullable();
                 

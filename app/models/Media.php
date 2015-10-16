@@ -16,6 +16,7 @@ class Media extends Model
 {
     protected $table = 'medias';
 
+    /* get all tweets */
     public function tweets() {
         return $this->belongsToMany('Tweet', 'tweet_media', 'media_id', 'tweet_id');
     }
