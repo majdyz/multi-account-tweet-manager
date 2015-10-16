@@ -209,6 +209,7 @@ class Migrator{
             Capsule::schema()->create('twitteraccounts', function($table)
             {
                 $table->increments('id');
+                $table->string('uuid');
                 $table->string('username');
                 $table->string('oauth_token');
                 $table->string('oauth_token_secret');
@@ -218,6 +219,7 @@ class Migrator{
                 // We'll need to ensure that MySQL uses the InnoDB engine to
                 // support the indexes, other engines aren't affected.
                 $table->engine = 'InnoDB';
+                $table->index('uuid');
             });
         }
 
