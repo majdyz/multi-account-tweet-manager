@@ -82,13 +82,14 @@ class TweetSetController extends BaseController
         View::display('@tweetset/tweetset/random.twig', $this->data);
     }
 
-    private function postOneTweet() {
+    private function postOneTweet($data,$tweetset_id) {
         /* initialize necessary variables */
         $account = $data['account'];
         $tweet   = Tweet::getOneTweet($tweetset_id,$data['tweet']['id']);
         $medias  = $tweet->getMediaUrl();
         $tweet   = $tweet->toArray();
         $message = $tweet['text'];
+        $user    = User::find(Sentry::getUser()->id);
 
         /** check wether the user own the account */
         if (!$user->hasThisAccount($account['id'])) {
@@ -133,15 +134,14 @@ class TweetSetController extends BaseController
         $data    = null;
         $message = "";
         $success = false;
-        $user    = User::find(Sentry::getUser()->id);
         
         try {
-            $input = Input::post()['value'];
+            $input       = Input::post()['value'];
             $tweetset_id = Input::post()['tweetset_id'];
+            $index       = Input::post()['index'];
 
-            foreach ($input as $data) {
-                $this->postOneTweet($input);
-            }
+            /* post the tweet  */
+            $this->postOneTweet($input,$tweetset_id);
                 
             $success = true;
             $message = 'Tweets posted successfully';
@@ -154,7 +154,7 @@ class TweetSetController extends BaseController
             Response::headers()->set('Content-Type', 'application/json');
             Response::setBody(json_encode(array(
                     'success' => $success, 
-                    'data' => "",//($data) ? $data->toArray() : $data, 
+                    'data' => $index,//($data) ? $data->toArray() : $data, 
                     'message' => $message, 
                     'code' => $success ? 200 : 500
             )));
