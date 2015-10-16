@@ -116,9 +116,9 @@ class TwitterAccountController extends BaseController
         
         unset($_SESSION['twitter_connect']);
 
-        if(is_null(TwitterAccount::where('id', '=', $access_token['user_id'])->first())){
+        if(TwitterAccount::where('uuid', '=', $access_token['user_id'])->get()->isEmpty()){
             $account = new TwitterAccount;
-            $account->id = $access_token['user_id'];
+            $account->uuid = $access_token['user_id'];
             $account->username = $access_token['screen_name'];
             $account->joined_at = time();
             $account->oauth_token = $access_token['oauth_token'];
@@ -129,7 +129,7 @@ class TwitterAccountController extends BaseController
         }
 
         $this->data['title'] = 'Successfully';
-        $this->data['account'] = TwitterAccount::find($access_token['user_id']);
+        $this->data['account'] = TwitterAccount::where('uuid',$access_token['user_id'])->first();
         $this->data['owner'] = Sentry::getUser();
         if ($this->data['account'] == null) {
             App::notFound();
