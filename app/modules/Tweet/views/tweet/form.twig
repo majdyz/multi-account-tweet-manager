@@ -1,18 +1,17 @@
-<form role="form" class="form-horizontal" id="tweet-form-data">
 	<input type="hidden" id="tweet_id" name="id">
 
     <div class="form-group">
         <div>
           <label for="name" class="col-lg-12" style="text-align: left">Name</label>
           <div class="col-lg-8">
-              <input type="text" class="input-sm form-control validate[required]" name="name" id="tweet_name" placeholder="Name">
+              <input type="text" class="input-sm form-control validate[required]" name="name" id="tweet_name" placeholder="Name" required>
           </div>
         </div>
         
         <div id="tweet_tweetset_id_title">
           <label for="name" class="col-lg-12" style="text-align: left">TweetSet</label>
           <div class="col-lg-8">
-            <select class="form-control" name="tweetset_id" id="tweet_tweetset_id">
+            <select class="form-control" name="tweetset_id" id="tweet_tweetset_id" required>
               {% for tweetset in tweetsets %}
                 <option value = {{tweetset.id}}>{{tweetset.name}}</option>
               {% endfor %}
@@ -23,36 +22,23 @@
         <div id="tweet_media_title">
           <label for="name" class="col-lg-12" style="text-align: left">Media</label>
           <div class="col-lg-8" id = "tweet_medias">
-            {% if media is empty %}
+            {% if medias is empty %}
               There is no media available
             {% endif %}
-            {% for media in medias %}
-              <input type="checkbox" name="media" id="tweet_media_{{media.id}}" value="{{media.id}}"> {{media.name}}  <br>
-            {% endfor %}
+            <div class="checkbox">
+              {% for media in medias %}
+                <label>
+                  <input type="checkbox" name="media" id="tweet_media_{{media.id}}" value="{{media.id}}"> {{media.name}}  <br>
+                </label>
+              {% endfor %}
+            </div>
           </div>
         </div>
 
         <div>
           <label for="name" class="col-lg-12" style="text-align: left">Tweet Text</label>
           <div class="col-lg-8">
-              <textarea type="text" rows = "4" class="input-sm form-control validate[required]" name="text" id="tweet_text" placeholder="Write your tweet here"></textarea>
+              <textarea type="text" rows = "4" class="input-sm form-control validate[required]" name="text" id="tweet_text" placeholder="Write your tweet here" required></textarea>
           </div>
         </div>
-
-        <div>
-          <label for="name" class="col-lg-12" style="text-align: left">Mentions</label>
-          <div class="col-lg-8">
-              <input type="text" class="input-sm form-control validate[required]" name="mentions" id="tweet_mentions" placeholder="Mentions">
-          </div>
-        </div>
-
-        <div>
-          <label for="name" class="col-lg-12" style="text-align: left">Hashtags</label>
-          <div class="col-lg-8">
-              <input type="text" class="input-sm form-control validate[required]" name="hashtags" id="tweet_hashtags" placeholder="Hashtags">
-          </div>
-        </div>
-
-
     </div>
-</form>

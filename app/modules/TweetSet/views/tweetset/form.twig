@@ -1,18 +1,16 @@
-<form role="form" class="form-horizontal" id="tweetset-form-data">
 	<input type="hidden" id="tweetset_id" name="id">
 
     <div class="form-group">
         
         <div class="col-lg-8">
         	<label for="name">Name</label> <br>
-            <input type="text" class="input-sm form-control validate[required]" name="name" id="tweetset_name" placeholder="Name">
+            <input type="text" class="input-sm form-control validate[required]" name="name" id="tweetset_name" placeholder="Name" required>
         </div>
 
         
         
-        <div class="col-lg-8">
-        	<label for="user_involved">User Involved</label> <br>
-            <input type="text" class="input-sm form-control validate[required]" name="user_involved" id="tweetset_user_involved" placeholder="User involved">
+        <div class="col-lg-12">
+        	<label for="user_involved">Maximum User Involved (accounts chosed randomly)</label> <br>
+            <input type="number" class="input-sm form-control validate[required]" name="user_involved" id="tweetset_user_involved" placeholder="User involved" required>
         </div>
     </div>
-</form>
