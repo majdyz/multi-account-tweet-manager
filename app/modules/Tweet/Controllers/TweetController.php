@@ -15,18 +15,7 @@ use \Sentry;
 use \Admin\BaseController;
 
 class TweetController extends BaseController
-{
-    /** 
-    * sanitize input 
-    */
-    private function sanitize ($input) {
-        foreach ($input as $i => $value) {
-           $input[$i] = htmlspecialchars($value);
-        }
-        return $input;
-    }
-
-    
+{   
     /**
      * display list of resource
      */
