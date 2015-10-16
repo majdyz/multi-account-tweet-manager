@@ -144,8 +144,6 @@ $(function(){
                             '<tr id="tweet-row-'+resp.data.id+'">'+
                                 '<td>'+tweet.name+'</td>'+
                                 '<td>'+tweet.text+'</td>'+
-                                '<td>'+tweet.mentions+'</td>'+
-                                '<td>'+tweet.hashtags+'</td>'+
                                 '<td>'+tweet.media+'</td>'+
                                 '<td>'+tweet.updated_at+'</td>'+
                                 '<td class="text-center">'+
@@ -164,10 +162,8 @@ $(function(){
 
                         $($fields[0]).html(tweet.name);
                         $($fields[1]).html(tweet.text);
-                        $($fields[2]).html(tweet.mentions);
-                        $($fields[3]).html(tweet.hashtags);
-                        $($fields[4]).html(tweet.media);
-                        $($fields[5]).html(tweet.updated_at);
+                        $($fields[2]).html(tweet.media);
+                        $($fields[3]).html(tweet.updated_at);
                     }
 
                     /** reset the form and hide modal form */

@@ -16,6 +16,9 @@ class Tweet extends Model
 {
 	protected $table = 'tweets';
 
+    /* 
+     * get tweet owner
+    */
 	public function TweetSet() {
         return $this->belongsTo('TweetSet');
     }
@@ -94,8 +97,6 @@ class Tweet extends Model
     	    $tweet->name = $input['name'];
             $tweet->tweetset_id = $input['tweetset_id'];
             $tweet->text = $input['text'];
-            $tweet->mentions = $input['mentions'];
-            $tweet->hashtags = $input['hashtags'];
     	    return $tweet;
         }
         else {
@@ -112,8 +113,6 @@ class Tweet extends Model
             $tweet->name = $input['name'];
             $tweet->tweetset_id = $input['tweetset_id'];
             $tweet->text = $input['text'];
-            $tweet->mentions = $input['mentions'];
-            $tweet->hashtags = $input['hashtags'];
     	    return $tweet;
         }
         else {

@@ -134,14 +134,6 @@ class TweetSetController extends BaseController
                 
                 $tweet_text = $tweet['text'];
 
-                if (strlen($tweet['mentions']) > 0) {
-                    $tweet_text = $tweet_text . "\n" .   $tweet['mentions'];
-                }
-
-                if (strlen($tweet['hashtags']) > 0) {
-                    $tweet_text = $tweet_text . "\n" . $tweet['hashtags'];
-                }  
-
                 $files = [];
                 foreach ($medias as $url) {
                     $files[] = $connection->upload('media/upload', array('media' => $url))->media_id_string;
