@@ -37,8 +37,8 @@
                         <td>{{ tweetset.created_at }}</td>
                         <td class="text-center">
                             <a data-id="{{ tweetset.id }}" class="btn btn-xs btn-warning btn-tweetset-random" href="tweetset/random-tweet/{{tweetset.id}}"><i class="fa fa-fire fa-fw"></i>Randomize</a>
-                            <a data-id="{{ tweetset.id }}" class="btn btn-xs btn-primary btn-tweetset-edit" href="#"><i class="fa fa-edit fa-fw"></i>Edit</a>
                             <a data-id="{{ tweetset.id }}" class="btn btn-xs btn-success btn-tweetset-view" href="tweetset/show-tweet/{{tweetset.id}}"><i class="fa fa-comment fa-fw"></i>Tweets</a>
+                            <a data-id="{{ tweetset.id }}" class="btn btn-xs btn-primary btn-tweetset-edit" href="#"><i class="fa fa-edit fa-fw"></i>Edit</a>
                             <a data-id="{{ tweetset.id }}" class="btn btn-xs btn-danger btn-tweetset-delete" href="#"><i class="fa fa-times fa-fw"></i>Remove</a>
                         </td>
                     </tr>
@@ -55,13 +55,15 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="modal-title">Tweetset Form</h4>
             </div>
-            <div class="modal-body">
-                {% include '@tweetset/tweetset/form.twig' %}
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success btn-sm" id="btn-tweetset-save" data-method="">Save</button>
-            </div>
+            <form role="form" class="form-horizontal" id="tweetset-form-data">
+                <div class="modal-body">
+                    {% include '@tweetset/tweetset/form.twig' %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success btn-sm" id="btn-tweetset-save" data-method="">Save</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
