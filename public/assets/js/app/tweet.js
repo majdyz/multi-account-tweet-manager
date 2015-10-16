@@ -8,7 +8,6 @@ $(function(){
      *     code : integer
      * }
      */
-
     
     var $loader = $('#loader');
 
@@ -30,11 +29,9 @@ $(function(){
      * send GET request to display resource with specific id, and display it in modal form
      */
     $('#tweet-table').on('click', '.btn-tweet-edit', function(e){
-        var $tweetid = $(this).attr('data-id');
-
         e.preventDefault();
+        var $tweetid = $(this).attr('data-id');
         $loader.show();
-
 
         $.get(global.baseUrl+'admin/tweet/'+global.tweetset_id+'/'+$tweetid, function(resp){
             if(resp.success){
