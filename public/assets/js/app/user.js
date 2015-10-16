@@ -92,7 +92,7 @@ $(function(){
      * or send PUT request to update data on resource server
      * based on data-method value
      */
-    $('#user-form-data').click(function(e){
+    $('#user-form-data').submit(function(e){
         e.preventDefault();
 
         var $button = $("#btn-user-save"),
@@ -103,7 +103,6 @@ $(function(){
         $button.prop('disabled', true);
         $button.html('saving...');
         $loader.show();
-
 
         $.ajax({
             url: $url,

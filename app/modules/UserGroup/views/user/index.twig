@@ -1,5 +1,9 @@
 {% extends 'admin/index.twig' %}
 {% block content %}
+<ul class="breadcrumb">
+    <li><a href="../admin">Dashboard</a></li>
+    <li class="active">{{ title }}</li>
+</ul>
 <div class="row page-header-box">
     <div class="col-xs-10">
         <h3>{{ title }}</h3>
@@ -46,10 +50,10 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="modal-title">User Form</h4>
             </div>
-            <div class="modal-body">
-                {% include '@usergroup/user/form.twig' %}
-            </div>
             <form role="form" class="form-horizontal" id="user-form-data">
+                <div class="modal-body">
+                    {% include '@usergroup/user/form.twig' %}
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-success btn-sm" id="btn-user-save" data-method="">Save</button>

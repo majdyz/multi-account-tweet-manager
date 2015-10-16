@@ -271,4 +271,14 @@ class BaseController
         $path = trim($path, '/');
         return $this->data['baseUrl'].$path;
     }
+
+    /** 
+    * sanitize input 
+    */
+    protected function sanitize ($input) {
+        foreach ($input as $i => $value) {
+           $input[$i] = htmlspecialchars($value);
+        }
+        return $input;
+    }
 }
