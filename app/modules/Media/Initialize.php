@@ -16,19 +16,6 @@ class Initialize extends \SlimStarter\Module\Initializer{
         return 'media';
     }
 
-    public function registerAdminMenu(){
-
-        $adminMenu = Menu::get('admin_sidebar');
-
-        $userMenu = $adminMenu->createItem('media', array(
-            'label' => 'Media',
-            'icon'  => 'camera',
-            'url'   => 'admin/media'
-        ));
-
-        $adminMenu->addItem('media', $userMenu);
-    }
-
     public function registerAdminRoute(){
         Route::resource('/media', 'Media\Controllers\MediaController');
         Route::get('/media/destroy/:id', 'Media\Controllers\MediaController:destroy');
