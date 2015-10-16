@@ -90,12 +90,51 @@ class TweetSetController extends BaseController
         $this->publish('baseUrl', $this->data['baseUrl']);
 
         View::display('@tweetset/tweetset/random.twig', $this->data);
-
-        /** unpublish necessary js  variable */
-        $this->unpublish('tweetset_id', $tweetset_id);
-        $this->unpublish('baseUrl', $this->data['baseUrl']);
-        $this->unpublish('random_result');
     }
+
+    private function postOneTweet() {
+        /* initialize necessary variables */
+        $account = $data['account'];
+        $tweet   = Tweet::getOneTweet($tweetset_id,$data['tweet']['id']);
+        $medias  = $tweet->getMediaUrl();
+        $tweet   = $tweet->toArray();
+        $message = $tweet['text'];
+
+        /** check wether the user own the account */
+        if (!$user->hasThisAccount($account['id'])) {
+            throw new Exception("This is not your Twitter account");
+        }
+
+        /* create connection */
+        $credentials = TwitterAccount::getCredentialsTwitter();
+        $connection  = new TwitterOAuth(
+            $credentials['consumer_key'], 
+            $credentials['consumer_secret'], 
+            $account['oauth_token'],
+            $account['oauth_token_secret']
+        );                
+
+        /* import all medias */
+        $files = [];
+        foreach ($medias as $url) {
+            $files[] = $connection->upload('media/upload', array('media' => $url))->media_id_string;
+        }
+
+        /* get the tweet text */
+        $tweet_text = $tweet['text'];
+
+        if (count($files) > 0) {
+            $success_now = $connection->post("statuses/update", array("status"    => $tweet_text,'media_ids' => implode(',',$files)));
+        }
+        else {
+            $success_now = $connection->post("statuses/update", array("status" => $tweet_text));   
+        }
+        
+        if (!$success_now) {
+            throw new Exception('posting fail');
+        }
+    }
+
 
     /**
     *   post the tweet using user's twitter account
@@ -111,49 +150,7 @@ class TweetSetController extends BaseController
             $tweetset_id = Input::post()['tweetset_id'];
 
             foreach ($input as $data) {
-                $account = $data['account'];
-                $tweet   = Tweet::getOneTweet($tweetset_id,$data['tweet']['id']);
-                $medias  = $tweet->getMediaUrl();
-                $tweet   = $tweet->toArray();
-                $message = $tweet['text'];
-
-                /** check wether the user own the account */
-                if (!$user->hasThisAccount($account['id'])) {
-                    throw new Exception("This is not your Twitter account");
-                }
-
-                $credentials = TwitterAccount::getCredentialsTwitter();
-
-                $connection = new TwitterOAuth(
-                                $credentials['consumer_key'], 
-                                $credentials['consumer_secret'], 
-                                $account['oauth_token'],
-                                $account['oauth_token_secret']
-                            );
-
-                
-                $tweet_text = $tweet['text'];
-
-                $files = [];
-                foreach ($medias as $url) {
-                    $files[] = $connection->upload('media/upload', array('media' => $url))->media_id_string;
-                }
-
-                if (count($files) > 0) {
-                    $success_now = $connection->post("statuses/update", array(
-                            "status" =>$tweet_text,
-                            'media_ids' => implode(',',$files)
-                    ));
-                }
-                else {
-                    $success_now = $connection->post("statuses/update", array(
-                            "status" =>$tweet_text
-                    ));   
-                }
-                
-                if (!$success_now) {
-                    throw new Exception('posting fail');
-                }
+                $this->postOneTweet($input);
             }
                 
             $success = true;
@@ -182,33 +179,29 @@ class TweetSetController extends BaseController
      * display resource with specific id
      */
     public function show($id) {
-        if (Request::isAjax()) {
-            $tweetset = null;
-            $message = '';
-            
-            try {
-                $tweetset = TweetSet::getOneTweetSet($id);
-            }
-            catch(Exception $e) {
-                $message = $e->getMessage();
-            }
-            
-            Response::headers()->set('Content-Type', 'application/json');
-            Response::setBody(json_encode(array('success' => !is_null($tweetset), 'data' => !is_null($tweetset) ? $tweetset->toArray() : $tweetset, 'message' => $message, 'code' => is_null($tweetset) ? 404 : 200)));
-        } 
-        else {
+        $tweetset = null;
+        $message = '';
+        
+        try {
+            $tweetset = TweetSet::getOneTweetSet($id);
         }
+        catch(Exception $e) {
+            $message = $e->getMessage();
+        }
+        
+        Response::headers()->set('Content-Type', 'application/json');
+        Response::setBody(json_encode(array('success' => !is_null($tweetset), 'data' => !is_null($tweetset) ? $tweetset->toArray() : $tweetset, 'message' => $message, 'code' => is_null($tweetset) ? 404 : 200)));
     }
 
     /**
      * display resource with specific id
      */
     public function showTweet($tweetset_id) {
-        $this->data['title'] = TweetSet::getOneTweetSet($tweetset_id)->name."'s Tweets";
-        $this->data['tweets'] = Tweet::getAllTweets($tweetset_id)->toArray();
-        $this->data['tweetsets'] = TweetSet::getAllTweetSets()->toArray();
-        $this->data['medias'] = Media::where('user_id',Sentry::getUser()->id)->get()->toArray();
-        $this->data['tweetset_id'] = $tweetset_id;
+        $this->data['title']        = TweetSet::getOneTweetSet($tweetset_id)->name."'s Tweets";
+        $this->data['tweets']       = Tweet::getAllTweets($tweetset_id)->toArray();
+        $this->data['tweetsets']    = TweetSet::getAllTweetSets()->toArray();
+        $this->data['medias']       = Media::where('user_id',Sentry::getUser()->id)->get()->toArray();
+        $this->data['tweetset_id']  = $tweetset_id;
 
         /*querying name of tweet and medias*/
         foreach ($this->data['tweets'] as $i => $tweet) {
