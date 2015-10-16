@@ -74,8 +74,8 @@ $(function(){
      * send DELETE request to the resouce server
      */
     $('#tweet-table').on('click', '.btn-tweet-delete', function(e){
-        var $tweetid = $(this).attr('data-id');
         e.preventDefault();
+        var $tweetid = $(this).attr('data-id');
 
         if(confirm('Are you sure to delete this tweet?')){
             $loader.show();
@@ -105,12 +105,12 @@ $(function(){
      * or send PUT request to update data on resource server
      * based on data-method value
      */
-    $('#btn-tweet-save').click(function(e){
+    $('#tweet-form-data').submit(function(e){
         e.preventDefault();
 
-        var $button = $(this),
+        var $button = $("#btn-tweet-save"),
             $tweetdata = $('#tweet-form-data').serializeArray(),
-            $method = $(this).attr('data-method'),
+            $method = $("#btn-tweet-save").attr('data-method'),
             $url = ($method == 'POST') ? global.baseUrl+'admin/tweet/'+global.tweetset_id : global.baseUrl+'admin/tweet/'+global.tweetset_id+'/'+$('#tweet_id').val();
 
         $button.prop('disabled', true);

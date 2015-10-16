@@ -95,12 +95,11 @@ $(function(){
      * or send PUT request to update data on resource server
      * based on data-method value
      */
-    $('#btn-tweetset-save').click(function(e){
+    $('#tweetset-form-data').submit(function(e){
         e.preventDefault();
-
-        var $button = $(this),
+        var $button = $("#btn-tweetset-save"),
             $tweetsetdata = $('#tweetset-form-data').serialize(),
-            $method = $(this).attr('data-method'),
+            $method = $($button).attr('data-method'),
             $url = ($method == 'POST') ? global.baseUrl+'admin/tweetset' : global.baseUrl+'admin/tweetset/'+$('#tweetset_id').val();
 
         $button.prop('disabled', true);

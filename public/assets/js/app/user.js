@@ -92,12 +92,12 @@ $(function(){
      * or send PUT request to update data on resource server
      * based on data-method value
      */
-    $('#btn-user-save').click(function(e){
+    $('#user-form-data').click(function(e){
         e.preventDefault();
 
-        var $button = $(this),
+        var $button = $("#btn-user-save"),
             $userdata = $('#user-form-data').serialize(),
-            $method = $(this).attr('data-method'),
+            $method = $("#btn-user-save").attr('data-method'),
             $url = ($method == 'POST') ? global.baseUrl+'admin/user' : global.baseUrl+'admin/user/'+$('#user_id').val();
 
         $button.prop('disabled', true);

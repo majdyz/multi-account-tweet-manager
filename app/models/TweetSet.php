@@ -16,6 +16,7 @@ class TweetSet extends Model
 { 
 	protected $table = 'tweetsets';
 
+    /* relation */
     public function tweets() {
         return $this->hasMany('Tweet');
     }
