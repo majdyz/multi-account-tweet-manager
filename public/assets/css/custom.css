@@ -6,12 +6,10 @@
 
 .navbar-brand{
     padding: 10px 15px 10px;
-    font-size: 15px;
-
 }
 
 .navbar a {
-  color : #19435E;
+  color : #33334C;
 }
 
 img.navbar-logo{
@@ -126,6 +124,10 @@ img.navbar-logo{
   display: block;
   font-size: 14px;
   text-decoration: none;
+}
+
+.sidebar-menu .selected a {
+  color : white;
 }
 
 .sidebar-menu li a i {
