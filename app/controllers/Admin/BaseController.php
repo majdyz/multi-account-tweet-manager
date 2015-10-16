@@ -12,8 +12,5 @@ class BaseController extends \BaseController
     {
         parent::__construct();
         $this->data['title'] = 'Dashboard';
-
-        $adminMenu = Menu::create('admin_sidebar');
-        
     }
 }
