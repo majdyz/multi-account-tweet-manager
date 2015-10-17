@@ -1,11 +1,11 @@
 <?php
 
 $config['twitter'] = array(
-    'consumer_key' => 'T8LKmlFvoJNyQFfk3IBIoPDdE',
-    'consumer_secret' => 'Uwo3arcO5a4iRNj4mG15FVEIRZTa4XNOXhmsbFFmWCn8eEXnoW',
+    'consumer_key' => 'PylimU5eQwkH2jtFc5Qg1EuvM',
+    'consumer_secret' => 'pksMTOAsDzWSUGO1NqPxKesDmHCXg1qiAk18aYoiBYhhpxf8TD',
 );
 
 $config['twitter_seeds'] = [
-    'oauth_token' => '3292383559-hlWR7BSiczsXCDpuInyeZAmeNOvVZvI8YDZtrPv',
-    'oauth_token_secret' => 'QnAnW1VPBhU2XNJbrb2I17jhUHHZFJO7qfSBjyJKbfEL4',
+    'oauth_token' => '3292383559-0f2aJdPnlE6sFyq55gLTW1adXSfbMCXXQXOTJBs',
+    'oauth_token_secret' => 'EgtXMsyB9R4puiLkNYo8xqkFmKvnW6F7mrFQfU5gP7SUq',
 ];
