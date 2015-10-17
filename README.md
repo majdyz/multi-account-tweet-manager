@@ -30,17 +30,24 @@ You can access the installer by accessing install.php in your browser
 http://localhost/path/to/multi-account-tweet-manager/public/install.php
 ```
 
-####3 Configuration
+#####3 Setup Permission
+After composer finished install the dependencies, you need to change file and folder permission.
+```
+chmod -R 777 app/storage/
+chmod 666 app/config/database.php
+```
+
+#####4 Configuration
 Configuration file located in ```app/config```, change the consumer key and access token on ```app/config/twitter.php```. 
 You can get your own access token on https://apps.twitter.com/app/new. 
 You can use the provided access token for testing, but that is not recommended for security reason.
 
-####4 Run the app
+#####5 Run the app
 You can access the app from your browser
 ```
 http://localhost/path/to/multi-account-tweet-manager/public
 ```
 
-## License
+#### License
 
 Multi Account Tweet Manager is licensed under [MIT License](https://github.com/zmajdy/multi-account-tweet-manager/blob/master/LICENSE).
