@@ -124,6 +124,8 @@ class TweetSetController extends BaseController
         if (!$success_now) {
             throw new Exception('posting fail');
         }
+
+        return $success_now;
     }
 
 
@@ -141,10 +143,9 @@ class TweetSetController extends BaseController
             $index       = Input::post()['index'];
 
             /* post the tweet  */
-            $this->postOneTweet($input,$tweetset_id);
-                
-            $success = true;
-            $message = 'Tweets posted successfully';
+            $success = $this->postOneTweet($input,$tweetset_id);
+            if ($success) $message = 'Tweets posted successfully';
+            else $message = 'Failed to tweet';
         }
         catch(Exception $e) {
             $message = $e->getMessage();

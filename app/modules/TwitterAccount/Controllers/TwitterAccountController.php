@@ -117,15 +117,24 @@ class TwitterAccountController extends BaseController
         unset($_SESSION['twitter_connect']);
 
         if(TwitterAccount::where('uuid', '=', $access_token['user_id'])->get()->isEmpty()){
-            $account = new TwitterAccount;
-            $account->uuid = $access_token['user_id'];
-            $account->username = $access_token['screen_name'];
-            $account->joined_at = time();
-            $account->oauth_token = $access_token['oauth_token'];
+            $account                     = new TwitterAccount;
+            $account->joined_at          = time();
+            $account->uuid               = $access_token['user_id'];
+            $account->username           = $access_token['screen_name'];
+            $account->oauth_token        = $access_token['oauth_token'];
             $account->oauth_token_secret = $access_token['oauth_token_secret'];
-            $account->status = 3;
+            $account->status             = 3;
             $account->save();
             $account->users()->save(\User::find($id));
+        }
+        else {
+            $account                     = TwitterAccount::where('uuid', '=', $access_token['user_id'])->first();
+            $account->uuid               = $access_token['user_id'];
+            $account->username           = $access_token['screen_name'];
+            $account->oauth_token        = $access_token['oauth_token'];
+            $account->oauth_token_secret = $access_token['oauth_token_secret'];
+            $account->status             = 3;
+            $account->save();
         }
 
         $this->data['title'] = 'Successfully';
