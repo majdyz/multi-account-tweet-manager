@@ -123,7 +123,7 @@ class TwitterAccountController extends BaseController
             $account->username           = $access_token['screen_name'];
             $account->oauth_token        = $access_token['oauth_token'];
             $account->oauth_token_secret = $access_token['oauth_token_secret'];
-            $account->status             = 3;
+            $account->status             = 2;
             $account->save();
             $account->users()->save(\User::find($id));
         }
@@ -133,7 +133,7 @@ class TwitterAccountController extends BaseController
             $account->username           = $access_token['screen_name'];
             $account->oauth_token        = $access_token['oauth_token'];
             $account->oauth_token_secret = $access_token['oauth_token_secret'];
-            $account->status             = 3;
+            $account->status             = 2;
             $account->save();
         }
 
