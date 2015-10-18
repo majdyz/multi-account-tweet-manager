@@ -20,7 +20,7 @@ class Initialize extends \SlimStarter\Module\Initializer{
 
     public function registerAdminRoute(){
         Route::resource('/user', function(){
-            if (Sentry::getUser()->id !== 1) {
+            if (Sentry::getUser()->id != 1) {
                 throw new Exception("You're not supposed to be here.", 403);
             }
         } ,'UserGroup\Controllers\UserController');

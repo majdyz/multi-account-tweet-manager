@@ -26,16 +26,25 @@ class MediaController extends BaseController
 
     public function upload()
     {
-        $uploadfile = self::UPLOAD_PATH . basename($_FILES['userfile']['name']);
-        if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile)) {
-            $media = new Media;
-            $media->name = $_POST['name'];
-            $media->url = $this->siteUrl($uploadfile);
-            $media->user_id = \Sentry::getUser()->id;
-            $media->save();
-            Response::redirect($this->siteUrl('admin/media/' . $media->id));
-        };
+        $allowed_extensions = Array('jpg', 'jpeg', 'png', 'gif');
+        $filename = $_FILES['userfile']['name'];
+        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        if (in_array($extension, $allowed_extensions)) {
+            $uploadfile = self::UPLOAD_PATH . basename($filename);
+            if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile)) {
+                $media = new Media;
+                $media->name = $_POST['name'];
+                $media->url = $this->siteUrl($uploadfile);
+                $media->user_id = \Sentry::getUser()->id;
+                $media->save();
+                Response::redirect($this->siteUrl('admin/media/' . $media->id));
+            }         
+        }
+        else {
+            throw new Exception("Forbidden Upload", 403);
+        }
     }
+
 
     public function show($id)
     {
