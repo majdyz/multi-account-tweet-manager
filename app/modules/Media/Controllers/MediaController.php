@@ -12,6 +12,7 @@ use \TweetMedia;
 use \TwitterAccount;
 use \User;
 use \Response;
+use \Exception;
 
 class MediaController extends BaseController
 {
